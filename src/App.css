@@ -1,0 +1,25 @@
+#root {
+  border: 1px solid #000;
+  border-radius: 5px;
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #c1b9b9;
+}
+.red {
+  background-color: red;
+  height: 40px;
+  width: 30%;
+  margin-right: 2%;
+}
+.green {
+  background-color: green;
+  height: 40px;
+  width: 30%;
+}
+.read-the-docs {
+  color: #888;
+}
+label {
+  /* border: 1px solid red; */
+}

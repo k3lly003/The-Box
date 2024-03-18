@@ -1,6 +1,31 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const SelectContinent = () => {
+  const navigate = useNavigate();
+  function handleUseStatePage(event) {
+    event.preventDefault();
+    const selectedValue = event.target.value;
+    switch (selectedValue) {
+      case "africa":
+        navigate("/africa");
+        break;
+      case "europe":
+        navigate("/europe");
+        break;
+      case "asia":
+        navigate("/asia");
+        break;
+      case "northAmerica":
+        navigate("/northAmerica");
+        break;
+      case "southAmerica":
+        navigate("/southAmerica");
+      default:
+        navigate("/home");
+        return false;
+    }
+  }
   return (
     <>
       <div>

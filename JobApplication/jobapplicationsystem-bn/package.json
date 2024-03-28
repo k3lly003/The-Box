@@ -15,12 +15,14 @@
     "@types/express": "^5.0.0",
     "@types/mongoose": "^5.11.97",
     "@types/nodemon": "^1.19.6",
+    "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
     "nodemon": "^3.1.7",
+    "swagger-ui-express": "^5.0.1",
     "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {

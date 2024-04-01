@@ -1,0 +1,26 @@
+name: Update Contribution
+
+on:
+  push:
+    branches:
+      - countryAPI
+      - doTask
+      - googleAuth
+
+jobs:
+  update_contribution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run script to update contribution
+        run: |
+          # Add your script here to update contribution
+          # For example, you can use a script that makes a dummy commit
+          git config user.name "Your Name"
+          git config user.email "you@example.com"
+          echo "Dummy commit" >> dummy.txt
+          git add dummy.txt
+          git commit -m "Update contribution"
+          git push

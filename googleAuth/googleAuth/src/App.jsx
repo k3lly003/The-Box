@@ -12,11 +12,11 @@ const App = () => {
           <header className="flex justify-between w-100 mx-5 my-5">
             <h3 className="text-xl text-white">GoogleAuth</h3>
             <span className="flex justify-end gap-5">
-              <Link to="/" className="text-xl text-white">
+              <Link to="/home" className="text-xl text-white">
                 Home
               </Link>
               <Link
-                to="/login"
+                to="/"
                 className="inline-block text-xl px-4 py-2 leading-none rounded bg-green-500 text-white hover:border-transparent hover:text-green-500 hover:bg-white mt-4 lg:mt-0"
               >
                 Login
@@ -24,8 +24,8 @@ const App = () => {
             </span>
           </header>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
           </Routes>
         </Router>

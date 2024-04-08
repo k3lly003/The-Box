@@ -3,6 +3,9 @@ import "../App.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const google = () => {
+    window.open("http://localhost:5000/auth/google", "_self");
+  };
   return (
     <>
       <div className="flex justify-center">
@@ -39,7 +42,7 @@ const Login = () => {
             </div>
             <div class="flex items-center justify-between">
               <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 w-full px-4 rounded focus:outline-none focus:shadow-outline"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold p-2 w-full px-4 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
                 Sign In
@@ -47,21 +50,21 @@ const Login = () => {
             </div>
           </form>
           <div className="mt-5 w-1/2 ml-8">
-            <h1 className="inline-block align-baseline font-bold text-xl text-blue-500">
+            <h1 className="inline-block align-baseline font-bold text-xl text-green-500">
               Login with
             </h1>
             <div className="flex gap-5 mt-5">
-              <Link>Google</Link>
-              <Link>Facebook</Link>
-              <Link>Gmail</Link>
+              <span onClick={google}>Google</span>
+              <span>Facebook</span>
+              <span>Gmail</span>
             </div>
           </div>
-          <Link
+          {/* <Link
             to="/signup"
             className="block text-black ml-8 w-7/12 hover:text-green-500 text-md font-bold my-5"
           >
             Don't have an account yet ? <span>SignUp</span>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </>

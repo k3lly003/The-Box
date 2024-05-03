@@ -1,5 +1,5 @@
 {
-  "name": "file-storage",
+  "name": "inventory-management",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,19 +9,34 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "convex": "^1.15.0",
-    "next": "14.2.7",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
+    "@mui/x-data-grid": "^7.14.0",
+    "@reduxjs/toolkit": "^2.2.7",
+    "axios": "^1.7.5",
+    "dotenv": "^16.4.5",
+    "lucide-react": "^0.436.0",
+    "next": "14.2.6",
+    "numeral": "^2.0.6",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-redux": "^9.1.2",
+    "recharts": "^2.12.7",
+    "redux-persist": "^6.0.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.16.1",
+    "@types/numeral": "^2.0.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
-    "eslint-config-next": "14.2.7",
+    "eslint-config-next": "14.2.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tw-colors": "^3.3.1",
     "typescript": "^5"
   }
 }

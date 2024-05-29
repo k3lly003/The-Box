@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meet Bruce</title>
+    <link rel="icon" href="./image/logo-search-grid-1x.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tinos:ital@1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./dist/output.css" />
+  </head>
+  <body>
+    <div class="home-all">
+      <div class="up-bar">
+        <div class="logo">
+          <a href="index.html">
+            <h2>meet.</h2>
+          </a>
+        </div>
+        <div class="main-navigation">
+          <div class="about">
+            <a href="./index.html#about" class="about-u"> About us </a>
+          </div>
+          <div class="projects">
+            <a href="./index.html#projects" class="projects-u"> projects </a>
+          </div>
+          <div class="contact-me">
+            <a href="./index.html#contact" class="contact-me-u"> text us </a>
+          </div>
+        </div>
+      </div>
+      <div class="center-all">
+        <div class="image">
+          <p>Hello, there Dev Bruce here</p>
+          <p>Welcome to my side Blog, what do I mean saying side Blog?</p>
+        </div>
+        <h1 class="text-3xl font-bold underline text-white-200">
+          Hello world!
+        </h1>
+        <div class="icons">
+          <a href="https://www.linkedin.com/in/kelly-brice-040554268/"
+            ><div><i class="bx bxl-linkedin-square"></i></div>
+          </a>
+          <a href="https://www.instagram.com/accounts/login/">
+            <div><i class="bx bxl-instagram"></i></div>
+          </a>
+          <a href="https://github.com/k3lly003">
+            <div><i class="bx bxl-github"></i></div>
+          </a>
+          <a href="https://twitter.com/kellyntiru">
+            <div><i class="bx bxl-twitter"></i></div>
+          </a>
+        </div>
+      </div>
+      <div class="about-me" id="about">
+        <div class="abt-helpin">
+          <div class="about-h">
+            <h2 class="abt-me-para">About-me</h2>
+          </div>
+          <section class="helpin">
+            <p class="para">My name is Ntirushwa Brice Kelly, and am a MEARN</p>
+            <p>stack developer. I really enjoy being able to build things in</p>
+            <p>the web, which is why I decided to pursue a career in web</p>
+            <p>
+              development. I started learning web development in January 2023
+            </p>
+            <p>
+              and have consistently learning since then. Since then I've been
+            </p>
+            <p>
+              to build and work on amazing projects by using the skills that
+            </p>
+            <p>I gained during that journey</p>
+          </section>
+        </div>
+        <div class="cv">
+          <h3>Download my cv here</h3>
+          <a href="./My Resume.pdf" download="cv">
+            <button class="cv-download">Resume</button>
+          </a>
+        </div>
+      </div>
+      <div class="my-projects" id="projects">
+        <div class="proje-header">
+          <h2>My Projects</h2>
+        </div>
+        <div class="project-cont">
+          <!-- <marquee behavior="" direction="left"> -->
+          <div class="project">
+            <div class="project-row">
+              <!-- <img src="./img/logo-search-grid-1x.png" alt="portfolio" /> -->
+              <div class="layer">
+                <h3>PORTFOLIO</h3>
+                <p>Project Description:</p>
+                <h6>This project help you to know me well,</h6>
+                <h6>chat with me, and review the projects</h6>
+                <h6>that am currently building and those</h6>
+                <h6>that I've been working on.</h6>
+              </div>
+            </div>
+            <div class="project-row">
+              <!-- <img src="./img/mbaza.png" alt="mbaza-nlp" /> -->
+              <div class="layer">
+                <h3>MBAZA NLP</h3>
+                <p>Project Description:</p>
+                <h6>A Natural Language Processing (NLP)</h6>
+                <h6>project with Kinyarwanda automatic</h6>
+                <h6>speech recognition (ASR, also known as</h6>
+                <h6>Speech-to-Text, STT), Text-to-Speech</h6>
+                <h6>(TTS), and semantic chatbots.</h6>
+              </div>
+            </div>
+            <div class="project-row">
+              <!-- <img src="./img/Maternity_.png" alt="Mmacare" /> -->
+              <div class="layer">
+                <h3>Mama Care</h3>
+                <p>Project Description:</p>
+                <h6>The system that help pregnant mothers</h6>
+                <h6>and those who gave birth, to be healthy</h6>
+                <h6>by providing appointments, health tips</h6>
+                <h6>and more.</h6>
+              </div>
+            </div>
+            <div class="project-row">
+              <!-- <img src="./img/dark.png" alt="dark-mode" /> -->
+              <div class="layer">
+                <h3>Dark mode Extension</h3>
+                <p>Project Description:</p>
+                <h6>An extension that turns a website</h6>
+                <h6>into dark mode, to help users to avoid</h6>
+                <h6>unwanted brightness light.</h6>
+              </div>
+            </div>
+          </div>
+          <!-- </marquee> -->
+        </div>
+      </div>
+      <div>
+        <Footer>
+      </div>
+      <section id="contact">
+        <div class="feed">
+          <form
+            class="yelow"
+            id="form"
+            onsubmit="sendEmail(); reset(); return false;"
+          >
+            <h3 class="send-me">Send me a mail</h3>
+            <input
+              type="text"
+              placeholder="your names"
+              class="input-one"
+              id="userName"
+              required
+            />
+            <input
+              type="email"
+              placeholder="your email"
+              class="input-one"
+              id="userEmail"
+              required
+            />
+            <textarea
+              placeholder="your message"
+              id="in-msg"
+              required
+            ></textarea>
+            <div class="feed-btn">
+              <button type="submit" onclick="{submit}">send message</button>
+            </div>
+          </form>
+        </div>
+        <div class="div-pe">
+          <div class="ico">
+            <i class="bx bx-phone-call" class="phone"></i>
+            <i class="bx bxl-gmail" class="mail"></i>
+          </div>
+          <div class="p2">
+            <p>0780405348</p>
+            <p>ntirukelly@gmail.com</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="https://unpkg.com/typed.js@2.0.132/dist/typed.umd.js"></script>
+    <script src="./index.js"></script>
+    <script src="path/to/typed.js"></script>
+  </body>
+</html>

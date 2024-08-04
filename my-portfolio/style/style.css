@@ -28,10 +28,10 @@ body {
   z-index: 2;
 }
 .up-bar {
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
-  background-color: rgba(71, 103, 61, 0.458);
+  background-color: rgb(71, 103, 61);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -95,9 +95,11 @@ body {
 }
 .center-all {
   /* border: 1px solid blue; */
-  /* width: inherit; */
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: space-evenly; */
+  color: white;
 }
 .center {
   /* border: 1px solid white; */
@@ -123,10 +125,9 @@ body {
   padding: 30% 10% 0% 0%;
 }
 .icons {
-  /* border: 2px solid red; */
+  border: 2px solid red;
   width: 10%;
-  margin: 6% 0% 0% 0%;
-  transform: translate(-150%, 0%);
+  /* transform: translate(-150%, 0%); */
 }
 .icons li {
   color: white;
@@ -143,12 +144,12 @@ body {
   box-shadow: 0 0 10px rgb(75, 245, 3), 0 0 15px rgb(75, 245, 3);
 }
 .image {
-  /* border: 1px solid orange; */
+  border: 1px solid orange;
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
-  /* width: 100vw; */
+  color: white;
 }
 .img {
   /* border: 2px solid green; */
@@ -368,6 +369,7 @@ body {
   padding-top: 5%;
 }
 .proje-header {
+  /* border: 1px solid orange; */
   width: 100%;
   display: flex;
   justify-content: center;

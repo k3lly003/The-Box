@@ -4,18 +4,9 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col px-28">
-        <div className="flex justify-end mt-2">
-        <Link href="/add-contact">
-          <div className="flex gap-5 items-center bg-gray-200 p-2 rounded-lg hover:bg-green-400 cursor-pointer">
-            <p>add course</p>
-            <IoIosAddCircleOutline />
-          </div>
-          </Link>
-        </div>
-        <div className="px-28 my-5">
-          <h1>COURSES GOES HERE ⬇️</h1>
-        </div>
+      <div className="flex flex-col justify-center items-center h-[80vh] px-28">
+        <h1 className="font-bold text-2xl">Mini Drive app</h1>
+        <p className="p-5 text-lg text-green-600">Store photos, audio files contact and many more on this app!</p>
       </div>
     </>
   );

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { IoIosAddCircleOutline } from "react-icons/io";
 
 export default function Home() {
   return (

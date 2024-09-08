@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const SelectContinent = () => {
@@ -21,6 +20,7 @@ const SelectContinent = () => {
         break;
       case "southAmerica":
         navigate("/southAmerica");
+        break;
       default:
         navigate("/home");
         return false;

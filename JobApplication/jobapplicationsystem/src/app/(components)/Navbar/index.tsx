@@ -26,7 +26,7 @@ const Navbar = () => {
       <div>
         <h2 className="text-lg font-bold">JOB APPLY SYSTEM</h2>
       </div>
-      <NavbarLink href="/home" label="Home" />
+      <NavbarLink href="/" label="Home" />
 
       <NavbarLink href="/dashboard" label="Dashboard" />
       {/* RIGHT SIDE */}

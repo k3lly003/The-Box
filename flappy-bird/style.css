@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #FFE5B4 100%);
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+}
+
+.game-container {
+    position: relative;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    border: 4px solid #2c3e50;
+}
+
+#gameCanvas {
+    display: block;
+    background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #8B7355 70%, #8B7355 100%);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    text-shadow: 3px 3px 0px #000;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.screen h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.screen p {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.instructions {
+    font-size: 16px !important;
+    color: #ffeb3b;
+    margin-top: 30px !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#scoreDisplay {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 3px 3px 0px #000;
+    z-index: 5;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Retro pixel effect */
+canvas {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}

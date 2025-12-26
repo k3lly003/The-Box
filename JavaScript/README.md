@@ -1,4 +1,4 @@
-# 🪐 brice 👾
+# 🪐 JavaScript 👾
 
 ## Description
 This is a modern, one-page portfolio website built using the latest version of Next.js. The site features a cosmic theme and leverages cutting-edge UI trends. Amazing animations are provided by Framer Motion and Aceternity UI, while styling is handled by TailwindCSS and the Shadcn UI library. The project aims to deliver a visually stunning and highly interactive user experience.

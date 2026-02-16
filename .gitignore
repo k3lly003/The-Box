@@ -1,0 +1,13 @@
+# --- Ignore specific folders ---
+node_modules/
+sb-annotations*errors/
+postgres-sharding/node_modules/
+
+# --- Ignore config and lock files ---
+.env
+pnpm-lock.yaml
+application.properties
+
+# --- Ignore IDE files ---
+.idea/
+.vscode/

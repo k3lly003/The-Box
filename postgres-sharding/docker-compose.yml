@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  metadata_db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: metadata_db
+    ports:
+      - "5430:5432"
+
+  shard_1:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: shard_1
+    ports:
+      - "5431:5432"
+
+  shard_2:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: shard_2
+    ports:
+      - "5432:5432"

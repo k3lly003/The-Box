@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Citizen {
+  id            String   @id @default(uuid())
+  national_id   String   @unique
+  full_name     String
+  city_district String
+  date_of_birth DateTime
+
+  @@map("citizens")
+}
+
+model CitizenMap {
+  id       String @id // citizen_id
+  shard_id Int
+
+  @@map("citizen_map")
+}

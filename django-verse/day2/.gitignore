@@ -1,0 +1,37 @@
+# Local Virtual Environments
+venv/
+ENV/
+env/
+
+# Django sensitive files
+.env
+db.sqlite3
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+
+# Static/Media files (if you want to keep local uploads out of Git)
+staticfiles/
+media/
+
+# Operating System files
+.DS_Store
+Thumbs.db

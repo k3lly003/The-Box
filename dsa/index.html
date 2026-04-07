@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-week DSA pattern mastery</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --container-bg: #262626;
+            --text-main: #ffffff;
+            --text-secondary: #aaaaaa;
+            --text-dim: #777777;
+            --accent-primary: #8a7aff;
+            --accent-secondary: #00ffaa;
+            --card-border: #3a3a3a;
+            --card-hover: #333333;
+            --tag-bg: #333333;
+            --platform-bg: #111111;
+            --platform-text: #cccccc;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        header .subtitle {
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .header-dots {
+            color: var(--text-dim);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .week-container {
+            margin-bottom: 30px;
+        }
+
+        h2.week-title {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+        }
+
+        .day-card {
+            background-color: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .day-card:hover {
+            background-color: var(--card-hover);
+        }
+
+        .day-card.active {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(138, 122, 255, 0.3);
+        }
+
+        .day-card.active .card-pattern {
+            color: var(--accent-primary);
+        }
+
+        .day-num {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .card-pattern {
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .status-dot.active {
+            background-color: var(--accent-primary);
+        }
+
+        /* Detail Area */
+        .detail-area {
+            display: none;
+            /* Initially hidden */
+            background-color: var(--container-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .detail-area.visible {
+            display: block;
+        }
+
+        .detail-header {
+            margin-bottom: 25px;
+        }
+
+        .detail-day-tag {
+            background-color: var(--accent-primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .detail-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+        }
+
+        .detail-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .detail-tag {
+            background-color: var(--tag-bg);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: default;
+        }
+
+        .sub-header {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+
+        .platforms-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .platform-card {
+            background-color: var(--platform-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .platform-title {
+            color: var(--platform-text);
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+        }
+
+        .problem-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .problem-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+            color: #eee;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .problem-list li:hover {
+            color: var(--accent-primary);
+        }
+
+        .problem-list li:last-child {
+            border-bottom: none;
+        }
+
+        .footer-rule {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rule-icon {
+            color: #f1c40f;
+            font-size: 20px;
+        }
+
+        .chevron-down {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--container-bg);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .day-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .platforms-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .day-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .platforms-container {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-container" id="app">
+        <header>
+            <div>
+                <h1>2-week DSA pattern mastery</h1>
+                <div class="subtitle">One pattern per day. Click a day to see signals, problems, and the daily rule.
+                </div>
+            </div>
+            <div class="header-dots">•••</div>
+        </header>
+
+        <div class="week-container" id="week-1">
+            <h2 class="week-title">WEEK 1 — ARRAYS & SEARCHING</h2>
+            <div class="day-grid" id="day-grid-1">
+            </div>
+        </div>
+
+        <div class="week-container" id="week-2">
+            <h2 class="week-title">WEEK 2 — TREES, GRAPHS & DP</h2>
+            <div class="day-grid" id="day-grid-2">
+            </div>
+        </div>
+
+        <div class="detail-area" id="detail-area">
+            <div class="detail-header">
+                <span class="detail-day-tag" id="detail-day-tag"></span>
+                <h1 class="detail-title" id="detail-title"></h1>
+                <div class="detail-subtitle" id="detail-subtitle"></div>
+            </div>
+
+            <div class="tag-container" id="tag-container">
+            </div>
+
+            <div class="sub-header">10 PROBLEMS EACH PLATFORM</div>
+            <div class="platforms-container">
+                <div class="platform-card">
+                    <div class="platform-title">LEETCODE</div>
+                    <ul class="problem-list" id="lc-problems"></ul>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-title">CODEWARS</div>
+                    <ul class="problem-list" id="cw-problems"></ul>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-title">HACKERRANK</div>
+                    <ul class="problem-list" id="hr-problems"></ul>
+                </div>
+            </div>
+
+            <div class="footer-rule">
+                <div class="footer-content">
+                    <span class="rule-icon">💡</span>
+                    <span id="daily-rule"></span>
+                </div>
+                <div class="chevron-down">⬇</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dsaData = [
+            // Week 1
+            { id: 1, week: 1, pattern: 'Sliding window', desc: 'Contiguous subarray/substring problems, max/min of a window', tags: ['fixed window size', 'max sum subarray', 'longest substring', 'k elements'], rule: 'If the problem involves a contiguous block with a constant window → slide a window.', lc: ['Max Sum Subarray of K', 'Longest Substring Without Repeat', 'Permutation in String', 'Fruit Into Baskets', 'Min Window Substring', 'Longest Repeating Char Replacement', 'Max Consecutive Ones III', 'Subarrays Summing to K', 'Best Time to Buy Stock', 'Count Distinct Elements'], cw: ['Max sequence sum', 'Sliding max window', 'String anagram check', 'Moving average', 'Count K-length subarrays', 'Two-sum sliding', 'Char frequency window', 'DNA sequence repeats', 'Consecutive ones', 'Substring with all chars'], hr: ['Max sum subarray', 'Count subarrays', 'Longest even subarray', 'K-distinct window', 'Min window', 'Anagram substring', 'Max profit window', 'Fixed window average', 'Sum equals K', 'Longest 1s run'] },
+            { id: 2, week: 1, pattern: 'Two pointers', desc: 'Working with sorted arrays or linked lists', tags: ['sorted array', 'linked list cycle', 'reverse array', 'palindrome check'], rule: 'Useful for comparisons or finding elements in sorted lists.', lc: ['Merge Sorted Array', 'Squares of Sorted Array', '3Sum', '4Sum', 'Sort Colors', 'Rotate Array', 'Remove Duplicates from Sorted', 'Subarrays with product less than K', 'Container With Most Water', 'Trapping Rain Water'], cw: ['Array merge sort', 'Find duplicate', 'Sum of two integers', 'Reverse linked list', 'Merge two sorted lists', 'Kth largest element', 'Remove duplicates', 'Two sum', 'Palindrome linked list', 'Count unique elements'], hr: ['Merge arrays', 'List cycle detect', 'List reversal', 'Remove duplicates', 'Find middle node', 'Check palindrome', 'Kth node from end', 'Rotate list', 'Check balanced brackets', 'Sort two lists'] },
+            { id: 3, week: 1, pattern: 'Prefix sum', desc: 'Pre-calculate subarray sums efficiently', tags: ['range queries', 'precomputation', 'array manipulations', 'summation patterns'], rule: 'Optimize repeated subarray sum queries by precomputation.', lc: ['Range Sum Query', 'Contiguous Array', 'Product of Array Except Self', 'Max Size Subarray Sum Equals k', 'Subarray Sum Equals K', 'Count Vowels in Ranges', 'Check if Subarray has Sum', 'Minimum Size Subarray Sum', 'Subarrays Summing K', 'Continuous Subarray Sum'], cw: ['Subarray sum', 'Running sum of array', 'Cumulative sum', 'Calculate running balance', 'Prefix array sum', 'Range sum', 'Matrix prefix sum', 'Largest subarray sum', 'Maximum subarray problem', 'Check sub-sequence'], hr: ['Subarray sums', 'Running sum', 'Prefix sum array', 'Summation logic', 'Range based sum query', 'Subarray with 0 sum', 'Kadane\'s Algorithm', 'Prefix logic problems', 'Maximum prefix sum', 'Problem range queries'] },
+            { id: 4, week: 1, pattern: 'Hash maps', desc: 'Quick retrieval, counting, and pattern matching', tags: ['key-value storage', 'dictionary lookup', 'frequent elements', 'frequency counting'], rule: 'Store counts, indices, or values for constant-time lookups.', lc: ['Two Sum', 'Isomorphic Strings', 'Group Anagrams', 'Valid Anagram', 'Find Duplicates in Array', 'Ransom Note', 'Distribute Candies', 'Find All Duplicates', 'H-Index', 'Top K Frequent Elements'], cw: ['Duplicate characters', 'Count elements', 'Find unique element', 'Anagram check', 'Two sum problem', 'Map storage', 'Key lookup', 'Find occurrences', 'Character frequency', 'Word frequency counter'], hr: ['Two sum problem', 'Count duplicates', 'Unique character count', 'Check isomorphic strings', 'Count frequencies', 'Dictionary problems', 'Pair counting', 'Most frequent element', 'Character count dictionary', 'Ransom note string problem'] },
+            { id: 5, week: 1, pattern: 'Binary search', desc: 'Efficiently find an element in a sorted collection', tags: ['sorted array search', 'divide and conquer', 'finding indices', 'searching'], rule: 'Cut the search space in half with each iteration.', lc: ['Binary Search', 'Search in Rotated Sorted Array', 'Find First and Last Position', 'Sqrt(x)', 'Find Minimum in Rotated Sorted Array', 'Search a 2D Matrix', 'Is Perfect Square', 'Count Negative Numbers in a Matrix', 'Intersection of Two Arrays', 'Find Peak Element'], cw: ['Find index of element', 'Classic binary search', 'Search sorted array', 'Find smallest index', 'Divide and conquer search', 'Find first occurence', 'Matrix binary search', 'Searching in large datasets', 'Efficiency algorithm', 'Find median of array'], hr: ['Binary search classic', 'Search in sorted array', 'Find first & last', 'Efficient searching', 'Find number square root', 'Find Peak element problem', 'Binary search 2D matrix', 'Divide and conquer approach', 'Binary search implementation', 'Find first element larger than'] },
+            { id: 6, week: 1, pattern: 'Monotonic stack', desc: 'Find next greater or smaller elements', tags: ['stack based solutions', 'next greater element', 'largest rectangle', 'daily temperatures'], rule: 'Process elements maintaining a sorted order in the stack.', lc: ['Next Greater Element I', 'Daily Temperatures', 'Next Greater Element II', 'Largest Rectangle in Histogram', 'Monotonic Stack problems', 'Remove K Digits', 'Next Greater Node in Linked List', 'Valid Parentheses', 'Online Stock Span', 'Count Vowels in Ranges'], cw: ['Find next greater element', 'Stock span problem', 'Classic stack usage', 'Find next smaller element', 'Processing elements in order', 'Largest histogram area', 'Stack-based solution', 'Online stock spanner problem', 'Expression evaluation', 'Check balanced brackets'], hr: ['Next greater element stack', 'Stack problem solutions', 'Monotonic stack logic', 'Next smaller element', 'Online stock problems', 'Daily temperature problem', 'Balanced parentheses', 'Simple stack implementation', 'Validate brackets problem', 'Problem with next element'] },
+            { id: 7, week: 1, pattern: 'Intervals', desc: 'Process intervals, merge, or check for overlaps', tags: ['interval merging', 'check intersection', 'scheduling', 'time management'], rule: 'Sort intervals to simplify overlap checks.', lc: ['Merge Intervals', 'Insert Interval', 'Interval List Intersections', 'Meeting Rooms', 'Meeting Rooms II', 'Non-overlapping Intervals', 'Employee Free Time', 'Minimum Number of Arrows', 'Remove Covered Intervals', 'Points on a line'], cw: ['Merge overlapping intervals', 'Interval intersection check', 'Sorting intervals', 'Interval merging logic', 'Meeting room problem', 'Merging algorithm', 'Check interval overlaps', 'Schedule management', 'Interval list matching', 'Problem solving with intervals'], hr: ['Interval problems', 'Merging logic intervals', 'Overlapping check', 'Meeting room scheduling', 'Time interval overlaps', 'Problem with intervals', 'Non-overlapping interval set', 'Interval list problems', 'Check for collisions', 'Algorithm with interval ranges'] },
+
+            // Week 2
+            { id: 8, week: 2, pattern: 'Fast & slow pointers', desc: 'Finding cycles in linked lists or determining length', tags: ['cycle detection', 'linked lists', 'middle element', 'pointer movement'], rule: 'Use two pointers moving at different speeds.', lc: ['Linked List Cycle', 'Linked List Cycle II', 'Happy Number', 'Middle of Linked List', 'Check if Linked List has Cycle', 'Remove Nth Node from End', 'Palindrome Linked List', 'Reorder List', 'Reverse Linked List', 'Odd Even Linked List'], cw: ['Find list cycle', 'Check happy number', 'Mid-point of list', 'Find loop in linked list', 'Pointers logic', 'Linked list manipulations', 'Find if list is palindrome', 'Modify linked list', 'Pointer approach solutions', 'Linked list node deletion'], hr: ['List cycle detection', 'Find middle element', 'Linked list mid-node', 'Check for cycle', 'Determine list length', 'Find n-th from end', 'Linked list problems', 'Check if a list has a cycle', 'List mid-point problem', 'Identify cycle in list'] },
+            { id: 9, week: 2, pattern: 'Tree DFS/BFS', desc: 'Traversal techniques for tree data structures', tags: ['tree traversal', 'depth first search', 'breadth first search', 'recursion'], rule: 'Traverse trees levels by levels (BFS) or explore depths (DFS).', lc: ['Binary Tree Inorder Traversal', 'Binary Tree Preorder Traversal', 'Binary Tree Postorder Traversal', 'Level Order Traversal', 'Maximum Depth of Binary Tree', 'Minimum Depth of Binary Tree', 'Construct Binary Tree from Preorder', 'Symmetric Tree', 'Path Sum', 'Leaf-Similar Trees'], cw: ['Binary tree traversal', 'Tree inorder DFS', 'Preorder search tree', 'Tree BFS logic', 'Iterative tree traversal', 'Recursive tree search', 'Tree level traversal', 'Check tree properties', 'Find path in tree', 'Symmetric tree problem'], hr: ['Tree traversal DFS', 'BFS tree search', 'Postorder traversal', 'Preorder logic trees', 'Inorder sequence trees', 'Binary tree level order', 'Depth first search on tree', 'Breadth first tree travel', 'Iterative BFS on tree', 'Recursive DFS on tree'] },
+            { id: 10, week: 2, pattern: 'Graph BFS/DFS', desc: 'Explore graph structures, find paths or components', tags: ['graph exploration', 'path finding', 'connectivity', 'shortest path'], rule: 'Apply BFS for shortest path (unweighted) or DFS for deep exploration.', lc: ['Clone Graph', 'Course Schedule', 'Course Schedule II', 'Word Ladder', 'Number of Islands', 'Max Area of Island', 'Graph Traversals', 'Redundant Connection', 'Pacific Atlantic Water Flow', 'Keys and Rooms'], cw: ['Graph node traversal', 'DFS approach on graphs', 'Graph path finding', 'Clone a graph logic', 'Find number of islands', 'Simple DFS logic', 'Breadth first search on graph', 'Shortest path graph problem', 'Connectivity check', 'Network traversal'], hr: ['Graph traversal DFS', 'Graph traversal BFS', 'Number of components', 'Simple path finder', 'Graph traversal algorithm', 'Connected graph components', 'Clone graph problem', 'Explore a graph with DFS', 'Graph traversal strategy', 'Path detection logic'] },
+            { id: 11, week: 2, pattern: 'Heaps / top-K', desc: 'Maintain ordered subsets efficiently', tags: ['priority queue', 'k-largest elements', 'min heap', 'max heap'], rule: 'Use a priority queue for streaming top elements.', lc: ['Kth Largest Element in an Array', 'Top K Frequent Elements', 'Merge k Sorted Lists', 'Find Median from Data Stream', 'Smallest K-th Element in Matrix', 'Find K Closest Points to Origin', 'Top K Frequent Words', 'Split Array into Consecutive Subsequences', 'Reorganize String', 'Single-Threaded CPU'], cw: ['Kth largest', 'Find top k elements', 'Use min heap', 'Top frequent numbers', 'Heap based sorting', 'Use priority queue', 'Priority logic problems', 'K elements with largest values', 'Sorting large numbers', 'Data stream processing'], hr: ['K largest elements', 'Top K frequent problems', 'Use heap to solve', 'Find K-th largest', 'Heap structure usages', 'Top elements in stream', 'Find largest elements efficiently', 'Priority queue implementation', 'Working with dynamic data', 'Problem with priority heap'] },
+            { id: 12, week: 2, pattern: 'Backtracking', desc: 'Explore possibilities by trying options and undoing choices', tags: ['permutation generation', 'subset exploration', 'constraint satisfaction', 'recursion'], rule: 'Undo the last action before trying the next to explore all branches.', lc: ['Permutations', 'Subsets', 'Combination Sum', 'N-Queens', 'Sudoku Solver', 'Palindrome Partitioning', 'Generate Parentheses', 'Word Search', 'Combinations', 'Letters combinations of Phone Number'], cw: ['Generate combinations', 'Subset generation logic', 'Recursive permutations', 'Solving backtracking problems', 'Find all possibilities', 'State space exploration', 'Recursive approach with undo', 'Generating parenthetical expressions', 'Constraint satisfaction example', 'Problem with state exploration'], hr: ['Permutation generator', 'Generate all subsets', 'Backtracking logic', 'Find combinations sum', 'Constraint satisfaction puzzles', 'Problem exploration with backtracking', 'Subset enumeration logic', 'Permutations implementation', 'Word search logic backtracking', 'Generate all possible answers'] },
+            { id: 13, week: 2, pattern: 'Dynamic programming', desc: 'Solve optimization problems with overlapping subproblems', tags: ['recursive solutions', 'memoization', 'tabular approach', 'optimal substructure'], rule: 'Break down complex problems into subproblems and store solutions.', lc: ['Climbing Stairs', 'Fibonacci Number', 'Longest Common Subsequence', 'Edit Distance', '0/1 Knapsack', 'House Robber', 'Max Profit from Trading', 'Trapping Rain Water', 'Minimum Path Sum', 'Jump Game'], cw: ['DP Fibonacci', 'Climbing stairs problem', 'LCS implementation', 'Tabular DP', 'Recursive DP with memo', 'Memoization technique', 'Optimize with DP', 'Solving DP problems', 'Maximum value DP logic', 'Check for path existence with DP'], hr: ['DP approach classic', 'DP problems with subproblems', 'Optimize using memoization', 'Longest Common Subsequence', 'Dynamic programming strategy', 'Simple DP examples', 'Fibonacci with DP', 'Optimal path DP logic', 'DP implementation approach', 'Working with DP solutions'] },
+            { id: 14, week: 2, pattern: 'Topological sort', desc: 'Order nodes in a directed graph based on dependencies', tags: ['dependency management', 'graph processing', 'acyclic graphs', 'scheduling tasks'], rule: 'Sort items based on prerequisite relationships.', lc: ['Course Schedule', 'Course Schedule II', 'Alien Dictionary', 'Sequence Reconstruction', 'Minimum Depth of Binary Tree', 'Graph Traversals', 'Shortest Path in DAG', 'Longest Path in DAG', 'Determine dependency order', 'Graph structure handling'], cw: ['Order dependencies', 'Topological sort example', 'Process directed graph', 'Acyclic graph sorting', 'Prerequisite check topological', 'Find dependency order', 'Graph based scheduling', 'Working with DAGs', 'Processing dependencies', 'Sequence sorting topological'], hr: ['Dependency ordering', 'Graph sorting topological', 'Directed graph sort', 'Prerequisite order graph', 'Dependency resolution', 'Task scheduling using topological sort', 'Determine order based on prerequisites', 'Identify dependency sequences', 'Processing graph dependencies', 'Problem dependency sort'] }
+        ];
+
+        const currentDayId = 1; // Start with Day 1 active
+
+        function createDayCard(data) {
+            return `
+            <div class="day-card" id="day-${data.id}" onclick="selectDay(${data.id})">
+                <div class="day-num">Day ${data.id}</div>
+                <div class="card-pattern">${data.pattern}</div>
+                <div class="status-dot ${data.id === currentDayId ? 'active' : ''}"></div>
+            </div>
+        `;
+        }
+
+        function renderGrids() {
+            const grid1 = document.getElementById('day-grid-1');
+            const grid2 = document.getElementById('day-grid-2');
+            let grid1Html = '';
+            let grid2Html = '';
+
+            dsaData.forEach(day => {
+                if (day.week === 1) {
+                    grid1Html += createDayCard(day);
+                } else {
+                    grid2Html += createDayCard(day);
+                }
+            });
+
+            grid1.innerHTML = grid1Html;
+            grid2.innerHTML = grid2Html;
+        }
+
+        function selectDay(id) {
+            // Remove active class from all cards and dots
+            document.querySelectorAll('.day-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.status-dot').forEach(dot => dot.classList.remove('active'));
+
+            // Add active class to selected card and its dot
+            const selectedCard = document.getElementById(`day-${id}`);
+            selectedCard.classList.add('active');
+            selectedCard.querySelector('.status-dot').classList.add('active');
+
+            populateDetailArea(id);
+        }
+
+        function populateDetailArea(id) {
+            const data = dsaData.find(item => item.id === id);
+            if (!data) return;
+
+            // Show detail area
+            document.getElementById('detail-area').classList.add('visible');
+
+            // Update basic info
+            document.getElementById('detail-day-tag').innerText = `Day ${data.id}`;
+            document.getElementById('detail-title').innerText = data.pattern;
+            document.getElementById('detail-subtitle').innerText = data.desc;
+            document.getElementById('daily-rule').innerText = data.rule;
+
+            // Update tags
+            const tagContainer = document.getElementById('tag-container');
+            let tagsHtml = '';
+            data.tags.forEach(tag => {
+                tagsHtml += `<div class="detail-tag">${tag}</div>`;
+            });
+            tagContainer.innerHTML = tagsHtml;
+
+            // Update problem lists
+            const createListItems = (list) => list.map(problem => `<li>${problem}</li>`).join('');
+            document.getElementById('lc-problems').innerHTML = createListItems(data.lc);
+            document.getElementById('cw-problems').innerHTML = createListItems(data.cw);
+            document.getElementById('hr-problems').innerHTML = createListItems(data.hr);
+        }
+
+        // Initialize the app
+        function init() {
+            renderGrids();
+            selectDay(currentDayId); // Set Day 1 as active initially
+        }
+
+        window.onload = init;
+    </script>
+
+</body>
+
+</html>

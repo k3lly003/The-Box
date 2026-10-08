@@ -1,0 +1,294 @@
+{
+ "site": {
+  "id": "rulindo-kabeza",
+  "name": "Kabeza Site",
+  "district": "Rulindo",
+  "province": "Northern",
+  "sectors": [
+   "Masoro"
+  ],
+  "cells": [
+   "Kigarama",
+   "Nyamyumba"
+  ],
+  "villages": [
+   "Gacyamo",
+   "Kabeza",
+   "Marembo",
+   "Rubona",
+   "Rusenyi"
+  ],
+  "crs_source": "ITRF2005 / TM Rwanda (metres)",
+  "layout_version": "v1 (initial)",
+  "existing_layer": "Existing parcels (LAIS extract) — to be replaced by updated survey",
+  "parcel_database": "Kabeza_Site_Database_Update (Oct 2026)"
+ },
+ "kpis": {
+  "existing_parcels": 637,
+  "existing_area_ha": 53.66,
+  "layout_area_ha": 63.14,
+  "new_plots_excl_roads": 993,
+  "contribution_ha": 9.66,
+  "contribution_pct": 18,
+  "output_ha": 44,
+  "road_reserve_ha": 16.17,
+  "road_reserve_pct_of_layout": 25.6,
+  "road_length_km_est": 17.3,
+  "unique_owner_records": 400,
+  "joint_ownership_parcels": 339,
+  "government_parcels": 14
+ },
+ "zones": [
+  {
+   "zone_code": "R1A",
+   "zone_name": "Low density residential densification zone",
+   "plots": 440,
+   "area_m2": 195744.8,
+   "area_pct": 31
+  },
+  {
+   "zone_code": "T1",
+   "zone_name": "Road reserve",
+   "plots": 73,
+   "area_m2": 161668.3,
+   "area_pct": 25.6
+  },
+  {
+   "zone_code": "R3",
+   "zone_name": "Medium density residential - Expansion zone",
+   "plots": 332,
+   "area_m2": 128288.7,
+   "area_pct": 20.3
+  },
+  {
+   "zone_code": "R1B",
+   "zone_name": "Rural residential zone",
+   "plots": 135,
+   "area_m2": 50157.5,
+   "area_pct": 7.9
+  },
+  {
+   "zone_code": "C1",
+   "zone_name": "Mixed use commercial zone",
+   "plots": 17,
+   "area_m2": 30936.1,
+   "area_pct": 4.9
+  },
+  {
+   "zone_code": "F1",
+   "zone_name": "Forest plantation zone",
+   "plots": 2,
+   "area_m2": 23859,
+   "area_pct": 3.8
+  },
+  {
+   "zone_code": "R1",
+   "zone_name": "Low density residential zone",
+   "plots": 49,
+   "area_m2": 19649.5,
+   "area_pct": 3.1
+  },
+  {
+   "zone_code": "ET",
+   "zone_name": "Eco-Tourism and Open Space Zone",
+   "plots": 13,
+   "area_m2": 12403.8,
+   "area_pct": 2
+  },
+  {
+   "zone_code": "PF1",
+   "zone_name": "Education and research facilities",
+   "plots": 1,
+   "area_m2": 4149.2,
+   "area_pct": 0.7
+  },
+  {
+   "zone_code": "PF3",
+   "zone_name": "Religious facilities",
+   "plots": 3,
+   "area_m2": 2946.1,
+   "area_pct": 0.5
+  },
+  {
+   "zone_code": "PF5",
+   "zone_name": "Sport, Leisure facilities",
+   "plots": 1,
+   "area_m2": 1619.3,
+   "area_pct": 0.3
+  }
+ ],
+ "by_village": [
+  {
+   "village": "Gacyamo",
+   "parcels": 115,
+   "area_m2": 123130,
+   "contribution_m2": 22163.4
+  },
+  {
+   "village": "Kabeza",
+   "parcels": 57,
+   "area_m2": 57602.6,
+   "contribution_m2": 10368.5
+  },
+  {
+   "village": "Marembo",
+   "parcels": 434,
+   "area_m2": 332750,
+   "contribution_m2": 59895
+  },
+  {
+   "village": "Rubona",
+   "parcels": 1,
+   "area_m2": 394.2,
+   "contribution_m2": 71
+  },
+  {
+   "village": "Rusenyi",
+   "parcels": 28,
+   "area_m2": 21378.6,
+   "contribution_m2": 3848.2
+  }
+ ],
+ "land_use_existing": {
+  "Agricultural": 328,
+  "Residential": 238,
+  "Commercial activities": 42,
+  "Forestry": 14,
+  "Public Facility": 5,
+  "Economic - Private Gov't Land": 1
+ },
+ "analytics": {
+  "physical_loss_pct_median": 16,
+  "physical_loss_pct_mean": 23.8,
+  "parcels_physical_loss_over_18pct": 284,
+  "parcels_physical_loss_over_50pct": 88,
+  "parcels_no_physical_loss": 107,
+  "road_inside_parcels_ha": 7.61,
+  "public_space_inside_parcels_ha": 4.12,
+  "layout_outside_parcels_ha": 9.6,
+  "new_plots_per_parcel_median": 3,
+  "new_plots_per_parcel_max": 34,
+  "median_new_plot_m2_by_zone": {
+   "C1": 489,
+   "ET": 754,
+   "F1": 11930,
+   "PF1": 4149,
+   "PF3": 988,
+   "PF5": 1619,
+   "R1": 394,
+   "R1A": 391,
+   "R1B": 324,
+   "R3": 359
+  },
+  "landholders_output_under_300m2": 228,
+  "landholders_output_under_100m2": 54,
+  "owners_with_multiple_parcels": 119,
+  "mortgaged": 25,
+  "restricted": 10,
+  "provisional": 14,
+  "existing_size_bins_m2": {
+   "<100": 35,
+   "100-300": 147,
+   "300-500": 123,
+   "500-1000": 177,
+   "1000-2000": 100,
+   ">2000": 55
+  },
+  "output_size_bins_m2": {
+   "<100": 54,
+   "100-300": 174,
+   "300-500": 141,
+   "500-1000": 148,
+   "1000-2000": 85,
+   ">2000": 35
+  },
+  "existing_land_use_to_dominant_new_zone": {
+   "Agricultural": {
+    "C1": 32,
+    "ET": 8,
+    "F1": 11,
+    "PF1": 4,
+    "PF3": 1,
+    "R1": 17,
+    "R1A": 128,
+    "R1B": 33,
+    "R3": 70,
+    "T1": 24
+   },
+   "Commercial activities": {
+    "C1": 16,
+    "ET": 0,
+    "F1": 0,
+    "PF1": 2,
+    "PF3": 0,
+    "R1": 0,
+    "R1A": 4,
+    "R1B": 0,
+    "R3": 1,
+    "T1": 19
+   },
+   "Economic - Private Gov't Land": {
+    "C1": 1,
+    "ET": 0,
+    "F1": 0,
+    "PF1": 0,
+    "PF3": 0,
+    "R1": 0,
+    "R1A": 0,
+    "R1B": 0,
+    "R3": 0,
+    "T1": 0
+   },
+   "Forestry": {
+    "C1": 0,
+    "ET": 0,
+    "F1": 5,
+    "PF1": 1,
+    "PF3": 1,
+    "R1": 0,
+    "R1A": 5,
+    "R1B": 0,
+    "R3": 1,
+    "T1": 1
+   },
+   "Public Facility": {
+    "C1": 1,
+    "ET": 0,
+    "F1": 0,
+    "PF1": 1,
+    "PF3": 2,
+    "R1": 0,
+    "R1A": 1,
+    "R1B": 0,
+    "R3": 0,
+    "T1": 0
+   },
+   "Residential": {
+    "C1": 5,
+    "ET": 6,
+    "F1": 0,
+    "PF1": 0,
+    "PF3": 0,
+    "R1": 11,
+    "R1A": 79,
+    "R1B": 21,
+    "R3": 101,
+    "T1": 15
+   }
+  },
+  "road_density_km_per_ha": 0.27
+ },
+ "lineage": {
+  "rule": "overlap >= 5 m2 and >= 1% of plot area",
+  "building_plots": 973,
+  "from_1_upi": 248,
+  "from_2_upis": 336,
+  "from_3_upis": 236,
+  "from_4plus_upis": 153,
+  "plots_partly_outside_old_parcels": 184,
+  "old_parcels_with_new_plots": 595,
+  "old_parcels_entirely_road_or_public": 41,
+  "new_plots_per_old_parcel_median": 3,
+  "new_plots_per_old_parcel_max": 34
+ }
+}

@@ -1,0 +1,10 @@
+*,*::before,*::after{box-sizing:border-box}
+:root{--logo-pad:transparent;--logo-padding:0;--bg:#FFFFFF;--card:#FFFFFF;--ink:#000F14;--mut:#4F4F4F;--line:#BDBDBD;--track:#F4F4F4;--accent:#20603D;--deep:#143E28;--chip:#E9F5EE}
+:root[data-theme="dark"]{color-scheme:dark;--logo-pad:#FFFFFF;--logo-padding:4px 8px;--bg:#0E1B14;--card:#15261D;--ink:#E7F0EA;--mut:#A9BDB1;--line:#2F4A3B;--track:#1C3326;--accent:#6CCB94;--deep:#0A1610;--chip:#1E3A2B}
+body{margin:0;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--ink)}
+a{color:var(--accent)}a:hover{color:var(--ink)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;box-shadow:0 0 0 2px var(--bg)}
+a,button,summary,label,select,[role=button],[role=switch],[role=tab],input[type=checkbox],input[type=radio]{cursor:pointer}
+a *,button *,summary *,label *,[role=button] *,[role=switch] *,[role=tab] *{cursor:inherit}
+button,summary,[role=button],[role=switch],[role=tab]{-webkit-user-select:none;user-select:none}
+button:disabled,[aria-disabled=true]{cursor:not-allowed}

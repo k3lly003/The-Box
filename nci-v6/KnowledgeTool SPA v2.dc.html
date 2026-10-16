@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="ext-resource-dependency" content="data/dataset.json" data-resource-id="dataset">
+<meta name="ext-resource-dependency" content="data/rwanda-districts.geojson" data-resource-id="districts">
+<meta name="ext-resource-dependency" content="https://commons.wikimedia.org/wiki/Special:FilePath/Cleome%20gynandra%201DS-II%206937.jpg?width=1600" data-resource-id="img-isogi">
+<meta name="ext-resource-dependency" content="https://commons.wikimedia.org/wiki/Special:FilePath/Morelle%20ogomo%2C%20jardins%20du%20mus%C3%A9um%20de%20Toulouse%2001.JPG?width=1600" data-resource-id="img-isogo">
+<meta name="ext-resource-dependency" content="https://commons.wikimedia.org/wiki/Special:FilePath/Solanum%20torvum%20fruit%20and%20flower.jpg?width=1600" data-resource-id="img-intagarasoryo">
+<meta name="ext-resource-dependency" content="https://commons.wikimedia.org/wiki/Special:FilePath/Amaranthus%20(6).jpg?width=1600" data-resource-id="img-inyabutongo">
+<meta name="ext-resource-dependency" content="https://commons.wikimedia.org/wiki/Special:FilePath/A%20hill%20with%20terraces.jpg?width=1600" data-resource-id="img-terraces">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#132219;color:#F2F6EE;font-family:Urbanist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#CDEB9A}a:hover{color:#FFFFFF}
+:focus-visible{outline:2px solid #F6E27A;outline-offset:3px}
+::selection{background:#9BD35A;color:#0E1B12}
+select option{background:#1E3326;color:#F2F6EE}
+details>summary{list-style:none}details>summary::-webkit-details-marker{display:none}
+a,button,summary,label,select,[role=button],[role=switch],[role=tab],input[type=checkbox],input[type=radio]{cursor:pointer}
+a *,button *,summary *,label *,[role=button] *,[role=switch] *,[role=tab] *{cursor:inherit}
+button,summary,[role=button],[role=switch],[role=tab]{-webkit-user-select:none;user-select:none}
+button:disabled,[aria-disabled=true]{cursor:not-allowed}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="height:100vh;overflow-y:auto;padding:0;background:#132219">
+  <div data-frame="1" style="position:relative;min-height:100vh;border-radius:0;border:0;background:#132219;isolation:isolate;overflow:clip">
+    <div data-bg="1" aria-hidden="true" style="{{ bgStyle }}"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(22,44,28,0.45) 0px, rgba(19,34,25,0.85) 820px, #132219 1250px)"></div>
+
+    <header style="{{ headerStyle }}">
+      <a href="#m0" onClick="{{ goTop }}" aria-label="Indigenous Crops Knowledge Tool, back to the start" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#F2F6EE">
+        <span style="width:48px;height:48px;border-radius:14px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex:none;color:#2F8F3A">{{ ic.logo }}</span>
+        <span style="display:flex;flex-direction:column;line-height:1.15"><strong style="font-size:16px;font-weight:700">Rwanda’s Indigenous Crops</strong><span style="{{ subStyle }}">National Knowledge Tool</span></span>
+      </a>
+      <div role="group" aria-label="Language" style="{{ langBox }}"><sc-for list="{{ langs }}" as="lg" hint-placeholder-count="3"><button type="button" lang="{{ lg.code }}" aria-pressed="{{ lg.on }}" title="{{ lg.name }}" onClick="{{ lg.pick }}" style="{{ lg.style }}">{{ lg.label }}</button></sc-for></div>
+    </header>
+
+    <div style="{{ gridStyle }}">
+      <nav aria-label="Modules" style="{{ railStyle }}">
+        <sc-for list="{{ rail }}" as="r" hint-placeholder-count="11"><a href="{{ r.href }}" onClick="{{ r.go }}" aria-label="{{ r.aria }}" aria-current="{{ r.cur }}" title="{{ r.t }}" style="{{ r.style }}"><span style="display:flex">{{ r.icon }}</span><span style="{{ r.lab }}">{{ r.t }}</span></a></sc-for>
+      </nav>
+
+      <main style="{{ mainStyle }}">
+        <sc-if value="{{ loading }}"><p style="margin:120px 0;text-align:center;color:#B9C9B5">Loading the dataset…</p></sc-if>
+        <sc-if value="{{ failed }}"><p role="alert" style="margin:120px 0;text-align:center;color:#F6B48A">The dataset could not be loaded. {{ errText }}</p></sc-if>
+        <sc-if value="{{ ready }}">
+
+        <section id="m0" data-sec="0" aria-labelledby="h-m0" style="display:flex;flex-direction:column;gap:24px">
+          <h2 id="h-m0" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Start here</h2>
+          <div style="{{ heroGrid }}">
+            <div role="radiogroup" aria-label="Choose a crop" style="{{ thumbCol }}">
+              <sc-for list="{{ thumbs }}" as="t"><button type="button" role="radio" aria-checked="{{ t.on }}" aria-label="{{ t.name }}" onClick="{{ t.pick }}" style="{{ t.style }}"><span aria-hidden="true" style="{{ t.bg }}"></span></button></sc-for>
+            </div>
+            <div data-m="1" style="{{ heroBox }}">
+              <div data-hero="1" role="img" aria-label="{{ heroAlt }}" style="{{ heroStyle }}"></div>
+              <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><path d="M16 16 L32 24 L42 40" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.2"></path><circle cx="42" cy="40" r="0.7" fill="#FFFFFF"></circle><path d="M84 70 L70 64 L60 54" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.2"></path><circle cx="60" cy="54" r="0.7" fill="#FFFFFF"></circle></svg>
+              <div data-call="1" style="position:absolute;left:3%;top:6%;display:flex;flex-direction:column;gap:2px;max-width:220px">
+                <span style="font-size:14px;color:#DDE8D8">{{ c1.k }}</span><span style="font-size:13px;color:#B9C9B5">{{ c1.sub }}</span><strong style="font-size:clamp(22px, 2.2vw, 30px);font-weight:500;margin-top:4px">{{ c1.v }}</strong>
+              </div>
+              <div data-call="1" style="position:absolute;right:3%;top:58%;display:flex;flex-direction:column;gap:2px;text-align:right;max-width:240px">
+                <span style="font-size:14px;color:#DDE8D8">{{ c2.k }}</span><span style="font-size:13px;color:#B9C9B5">{{ c2.sub }}</span><strong style="font-size:clamp(22px, 2.2vw, 30px);font-weight:500;margin-top:4px">{{ c2.v }}</strong>
+              </div>
+              <div style="position:absolute;left:3%;bottom:4%;right:3%;display:flex;flex-direction:column;gap:6px">
+                
+                <h1 lang="rw" style="margin: 0; font-size: clamp(48px, 7vw, 104px); line-height: 0.92; font-weight: 500; letter-spacing: -0.03em; padding-top: 0px; padding-bottom: 0px; margin-bottom: 20px">{{ cropName }}</h1><p style="margin:0;font-size:16px;color:#DDE8D8">{{ cropSub }}</p>
+              </div>
+            </div>
+            <div data-m="1" style="align-self:center;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;padding:32px 28px;border-radius:32px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14)" onMouseEnter="{{ pauseFact }}" onMouseLeave="{{ resumeFact }}" onFocus="{{ pauseFact }}" onBlur="{{ resumeFact }}">
+              
+              <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Did you know? · {{ factPos }}</span>
+              <p aria-live="polite" style="{{ factStyle }}">{{ fact }}</p>
+              <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:260px"><sc-for list="{{ factDots }}" as="dt" hint-placeholder-count="5"><button type="button" aria-label="{{ dt.label }}" onClick="{{ dt.go }}" style="width:24px;height:24px;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="{{ dt.style }}"></span></button></sc-for></div>
+              <div style="display:flex;gap:12px"><button type="button" aria-label="Previous" title="Previous" onClick="{{ prevFact }}" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;border:1px solid rgba(255,255,255,0.3);background:transparent;color:#F2F6EE" style-hover="background:rgba(255,255,255,0.12)"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 5 L8 12 L15 19"></path></svg></button><button type="button" aria-label="Next fact" title="Next fact" onClick="{{ nextFact }}" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;border:0;background:#F2F6EE;color:#132219" style-hover="background:#FFFFFF"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5 L16 12 L9 19"></path></svg></button></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr));gap:24px;align-items:start">
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px">
+              <h3 style="margin:0;font-size:22px;font-weight:500">Child stunting since 2000</h3>
+              <sc-for list="{{ trend }}" as="r" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:48px minmax(0,1fr) 60px;gap:14px;align-items:center"><span style="font-size:16px;color:#DDE8D8">{{ r.y }}</span><span style="height:6px;border-radius:6px;background:rgba(255,255,255,0.14);overflow:hidden"><span data-bar="1" style="{{ r.bar }}"></span></span><span style="font-size:16px;text-align:right">{{ r.v }}</span></div></sc-for>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:#B9C9B5">Children under 5, %. Sources:<sc-for list="{{ trendSrc }}" as="x"><button type="button" onClick="{{ x.go }}" title="{{ x.title }}" style="{{ x.style }}">{{ x.id }}</button></sc-for></div>
+            </div>
+            <div data-m="1" style="padding:12px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 210px), 1fr));gap:4px">
+              <sc-for list="{{ tiles }}" as="k" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px">
+                <span aria-hidden="true" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;color:#DDE8D8">{{ k.icon }}</span>
+                <div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:14px;color:#DDE8D8">{{ k.label }}</span><strong style="font-size:30px;font-weight:500;letter-spacing:-0.01em">{{ k.v }}</strong><span style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:12px;color:#B9C9B5">{{ k.sub }}<sc-for list="{{ k.srcs }}" as="x"><button type="button" onClick="{{ x.go }}" title="{{ x.title }}" style="{{ x.style }}">{{ x.id }}</button></sc-for></span></div>
+              </div></sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section id="m1" data-sec="1" aria-labelledby="h-m1" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m1 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 01 · Know the crops</p><h2 id="h-m1" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Crop profile</h2></div></div>
+          <div style="{{ cropGrid }}">
+            <sc-for list="{{ cards }}" as="c"><button type="button" data-m="1" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="{{ c.style }}" style-hover="transform:translateY(-6px)">
+              <span style="display:block;height:180px;border-radius:20px;overflow:hidden"><span role="img" aria-label="{{ c.alt }}" style="{{ c.bg }}"></span></span>
+              <span style="display:flex;flex-direction:column;gap:4px;text-align:left"><span style="font-size:13px;color:#B9C9B5">{{ c.n }}</span><strong lang="rw" style="font-size:24px;font-weight:500">{{ c.name }}</strong><span style="font-size:14px;color:#DDE8D8">{{ c.en }} · <em>{{ c.sp }}</em></span></span>
+              <span style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;font-size:13px;color:#DDE8D8"><span>Part eaten<br><strong style="font-size:15px;color:#F2F6EE">{{ c.part }}</strong></span><span>First harvest<br><strong style="font-size:15px;color:#F2F6EE">{{ c.days }}</strong></span></span>
+            </button></sc-for>
+          </div>
+          <div data-m="1" style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 18px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);align-self:flex-start">
+            <span style="font-size:13px;font-weight:600;color:#DDE8D8">Preparation</span>
+            <div role="group" aria-label="Preparation" style="display:flex;gap:8px"><sc-for list="{{ prepChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div>
+            <span style="font-size:13px;color:#B9C9B5">Laboratory tests are not done yet; values are compiled (Grade C, to verify).</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr));gap:24px;align-items:start">
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:12px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">About <span lang="rw">{{ cropName }}</span></h3>
+              <dl style="margin:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px 16px;font-size:14px"><sc-for list="{{ about }}" as="a"><dt style="color:#B9C9B5">{{ a.k }}</dt><dd style="margin:0;color:#F2F6EE">{{ a.v }}</dd></sc-for></dl>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:12px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Nutrients per 100 g · {{ prepLabel }}</h3>
+              <sc-for list="{{ nutr }}" as="n"><div style="display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:15px"><span>{{ n.k }}</span><strong style="{{ n.vs }}">{{ n.v }}</strong></div></sc-for>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:10px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Nutrient score, out of 100</h3>
+              <sc-for list="{{ scoreRows }}" as="d"><div style="display:grid;grid-template-columns:120px minmax(0,1fr) 40px;gap:12px;align-items:center;font-size:14px"><span>{{ d.n }}</span><span style="height:8px;border-radius:8px;background:rgba(255,255,255,0.1);overflow:hidden"><span data-bar="1" style="{{ d.bar }}"></span></span><span style="text-align:right">{{ d.v }}</span></div></sc-for>
+              <p style="margin:0;font-size:12px;color:#B9C9B5">Iron, vitamin C and protein against daily values. Derived. Yellow: selected crop.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="m2" data-sec="2" aria-labelledby="h-m2" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m2 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 02 · Understand the need</p><h2 id="h-m2" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Health burdens</h2></div></div>
+          <div data-m="1" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 20px;padding:18px 22px;border-radius:24px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12)">
+            <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#B9C9B5">View by<select value="{{ hv }}" onChange="{{ onHv }}" style="min-height:44px;min-width:220px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px;text-transform:none;letter-spacing:0"><sc-for list="{{ hvOpts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></label>
+            <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#B9C9B5">{{ h2Label }}<select value="{{ h2v }}" onChange="{{ onH2 }}" style="min-height:44px;min-width:200px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px;text-transform:none;letter-spacing:0"><sc-for list="{{ h2Opts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></label>
+            <button type="button" onClick="{{ resetH }}" style="min-height:44px;padding:0 18px;border-radius:999px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:#F2F6EE;font-family:inherit;font-size:14px;cursor:pointer" style-hover="background:rgba(255,255,255,0.1)">Reset filters</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr));gap:16px;align-items:start">
+            <sc-for list="{{ hCards }}" as="k" hint-placeholder-count="4"><div data-m="1" style="{{ k.style }}"><span style="font-size:14px;color:#DDE8D8">{{ k.label }}</span><strong style="font-size:40px;font-weight:500;letter-spacing:-0.02em;line-height:1.05">{{ k.v }}</strong><span style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:13px;color:#B9C9B5">{{ k.sub }}<sc-for list="{{ k.srcs }}" as="x"><button type="button" onClick="{{ x.go }}" title="{{ x.title }}" style="{{ x.style }}">{{ x.id }}</button></sc-for></span></div></sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 400px), 1fr));gap:24px;align-items:start">
+            <sc-if value="{{ hIsDist }}"><div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Map: child stunting by district, 2025</h3>
+              <div>{{ hMap }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:#DDE8D8"><sc-for list="{{ hLegend }}" as="l"><span style="display:inline-flex;align-items:center;gap:6px"><span style="{{ l.sw }}"></span>{{ l.t }}</span></sc-for></div>
+              <p style="margin:0;font-size:12px;color:#B9C9B5">Select a district on the map or in the filter. Hatched districts have no published value and are not estimated.</p>
+            </div></sc-if>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:12px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">{{ hChartT }}</h3>
+              <sc-for list="{{ hRows }}" as="d"><div style="display:grid;grid-template-columns:130px minmax(0,1fr) 56px;gap:12px;align-items:center;font-size:14px"><span style="{{ d.ls }}">{{ d.n }}</span><span style="position:relative;height:10px;border-radius:10px;background:rgba(255,255,255,0.1);overflow:hidden"><span data-bar="1" style="{{ d.bar }}"></span></span><span style="text-align:right">{{ d.v }}</span></div></sc-for>
+              <p style="margin:0;font-size:12px;color:#B9C9B5">{{ hChartNote }}</p>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:12px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Food-insecure households by province, 2022</h3>
+              <sc-for list="{{ fiRows }}" as="d"><div style="display:grid;grid-template-columns:80px minmax(0,1fr) 56px;gap:12px;align-items:center;font-size:14px"><span>{{ d.n }}</span><span style="height:10px;border-radius:10px;background:rgba(255,255,255,0.1);overflow:hidden"><span data-bar="1" style="{{ d.bar }}"></span></span><span style="text-align:right">{{ d.v }}</span></div></sc-for>
+              <h3 style="margin:10px 0 0;font-size:20px;font-weight:500">National health indicators</h3>
+              <sc-for list="{{ natInd }}" as="n"><div style="display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px"><span>{{ n.k }} <span style="color:#B9C9B5">· {{ n.g }}</span></span><strong style="font-weight:600;white-space:nowrap">{{ n.v }}</strong></div></sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section id="m3" data-sec="3" aria-labelledby="h-m3" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m3 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 03 · Know the crops</p><h2 id="h-m3" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Yields &amp; inputs</h2></div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 380px), 1fr));gap:24px;align-items:start">
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Yield per season, kg per m²</h3>
+              <sc-for list="{{ yRows }}" as="d"><div style="display:grid;grid-template-columns:120px minmax(0,1fr) 120px;gap:12px;align-items:center;font-size:14px"><span lang="rw">{{ d.n }}</span><span style="position:relative;height:14px;border-radius:14px;background:rgba(255,255,255,0.08)"><span style="{{ d.rng }}"></span><span style="{{ d.mk }}"></span></span><span style="text-align:right;color:#DDE8D8">{{ d.v }}</span></div></sc-for>
+              <p style="margin:0;font-size:12px;color:#B9C9B5">Bar: published low–high range. Yellow mark: improved-practice yield.</p>
+              <h3 style="margin:8px 0 0;font-size:20px;font-weight:500">Days from sowing to first harvest</h3>
+              <sc-for list="{{ dRows }}" as="d"><div style="display:grid;grid-template-columns:120px minmax(0,1fr) 120px;gap:12px;align-items:center;font-size:14px"><span lang="rw">{{ d.n }}</span><span style="position:relative;height:14px;border-radius:14px;background:rgba(255,255,255,0.08)"><span style="{{ d.rng }}"></span></span><span style="text-align:right;color:#DDE8D8">{{ d.v }}</span></div></sc-for>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:linear-gradient(160deg, rgba(246,226,122,0.16), rgba(255,255,255,0.05));border:1px solid rgba(246,226,122,0.4);display:flex;flex-direction:column;gap:16px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Garden planner</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:14px">
+                <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#DDE8D8">Crop<select value="{{ plCrop }}" onChange="{{ onPlCrop }}" style="min-height:44px;min-width:180px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px"><sc-for list="{{ cropOpts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></label>
+                <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#DDE8D8">District<select value="{{ plDist }}" onChange="{{ onPlDist }}" style="min-height:44px;min-width:180px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px"><sc-for list="{{ distOpts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></label>
+                <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#DDE8D8">Garden area (m²)<input type="number" min="1" max="5000" value="{{ plArea }}" onChange="{{ onPlArea }}" style="min-height:44px;width:140px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px"></label>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;color:#DDE8D8">Expected harvest per season</span><strong style="font-size:clamp(36px, 4vw, 52px);font-weight:500;letter-spacing:-0.02em;color:#F6E27A">{{ plOut }}</strong><span style="font-size:13px;color:#B9C9B5">{{ plNote }}</span><div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:6px"><span style="padding:4px 12px;border-radius:999px;background:rgba(246,226,122,0.18);border:1px solid rgba(246,226,122,0.4);font-size:13px;font-weight:600;color:#F6E27A">{{ plSuit }}</span><span style="font-size:13px;color:#B9C9B5">{{ plSuitNote }}</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="m4" data-sec="4" aria-labelledby="h-m4" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m4 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 04 · Know the crops</p><h2 id="h-m4" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Growing zones</h2></div></div>
+          <div data-m="1" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 20px;padding:18px 22px;border-radius:24px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12)">
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#B9C9B5">Crop</span><div role="group" aria-label="Crop" style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ zChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#B9C9B5">Time</span><div role="group" aria-label="Time" style="display:flex;gap:8px"><sc-for list="{{ zpChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div></div>
+            <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#B9C9B5">District<select value="{{ zd }}" onChange="{{ onZd }}" style="min-height:44px;min-width:180px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:#1E3326;color:#F2F6EE;font-family:inherit;font-size:15px;text-transform:none;letter-spacing:0"><sc-for list="{{ distOpts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></label>
+          </div>
+          <p data-m="1" style="margin:0;padding:12px 18px;border-radius:16px;background:rgba(246,226,122,0.12);border:1px solid rgba(246,226,122,0.4);font-size:14px;color:#F6E27A">Hypothesis map: modelled suitability, not field observations.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 360px), 1fr));gap:24px;align-items:start">
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">{{ zTitle }}</h3>
+              <div>{{ zMap }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:#DDE8D8"><sc-for list="{{ zLegend }}" as="l"><span style="display:inline-flex;align-items:center;gap:6px"><span style="{{ l.sw }}"></span>{{ l.t }} ({{ l.n }})</span></sc-for></div>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Selected district</span>
+              <h3 style="margin:0;font-size:30px;font-weight:500">{{ zd }}</h3>
+              <p style="margin:0 0 6px;font-size:14px;color:#DDE8D8">{{ zSub }}</p>
+              <sc-for list="{{ zDetail }}" as="n"><div style="display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px"><span>{{ n.k }}</span><strong style="font-weight:600">{{ n.v }}</strong></div></sc-for>
+              <p style="margin:6px 0 0;font-size:12px;color:#B9C9B5">Status: Model. Rainfall and temperature are still to be checked.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="m5" data-sec="5" aria-labelledby="h-m5" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m5 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 05 · Understand the need</p><h2 id="h-m5" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Cost of hunger</h2></div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 210px), 1fr));gap:16px;align-items:start">
+            <sc-for list="{{ cost }}" as="k"><div data-m="1" style="padding:20px 22px;border-radius:24px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;color:#DDE8D8">{{ k.label }}</span><strong style="font-size:32px;font-weight:500;letter-spacing:-0.02em">{{ k.v }}</strong><span style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:12px;color:#B9C9B5">{{ k.st }}<sc-for list="{{ k.srcs }}" as="x"><button type="button" onClick="{{ x.go }}" title="{{ x.title }}" style="{{ x.style }}">{{ x.id }}</button></sc-for></span></div></sc-for>
+          </div>
+          <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px;max-width:760px">
+            <h3 style="margin:0;font-size:20px;font-weight:500">The pace of progress: stunting reduction, points per year</h3>
+            <sc-for list="{{ pace }}" as="d"><div style="display:grid;grid-template-columns:240px minmax(0,1fr) 60px;gap:12px;align-items:center;font-size:14px"><span>{{ d.n }}</span><span style="height:12px;border-radius:12px;background:rgba(255,255,255,0.1);overflow:hidden"><span data-bar="1" style="{{ d.bar }}"></span></span><span style="text-align:right">{{ d.v }}</span></div></sc-for>
+            <p style="margin:0;font-size:12px;color:#B9C9B5">Derived from published survey values. To reach 15% by 2029 the pace has to more than double.</p>
+          </div>
+        </section>
+
+        <section id="m6" data-sec="6" aria-labelledby="h-m6" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m6 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 06 · Policy and evidence</p><h2 id="h-m6" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">National policies</h2></div></div>
+          <div data-m="1" role="group" aria-label="Ministry" style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ minChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(min(100%, 320px), 1fr));gap:16px;align-items:start">
+            <sc-for list="{{ policies }}" as="p" hint-placeholder-count="3"><article data-m="1" style="padding:22px;border-radius:24px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);display:flex;flex-direction:column;gap:8px"><span style="font-size:12px;color:#B9C9B5">{{ p.meta }}</span><strong style="font-size:18px;font-weight:600;line-height:1.3">{{ p.n }}</strong><span style="font-size:14px;line-height:1.5;color:#DDE8D8">{{ p.what }}</span><span style="font-size:14px;line-height:1.5;color:#CDEB9A">{{ p.align }}</span><span style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:12px;color:#B9C9B5">{{ p.st }}<sc-for list="{{ p.srcs }}" as="x"><button type="button" onClick="{{ x.go }}" title="{{ x.title }}" style="{{ x.style }}">{{ x.id }}</button></sc-for></span></article></sc-for>
+          </div>
+          <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px;max-width:820px">
+            <h3 style="margin:0;font-size:20px;font-weight:500">National targets: baseline → target</h3>
+            <sc-for list="{{ targets }}" as="d"><div style="display:flex;flex-direction:column;gap:6px;font-size:14px"><span style="display:flex;justify-content:space-between;gap:12px"><span>{{ d.n }}</span><span style="color:#DDE8D8;white-space:nowrap">{{ d.v }}</span></span><span style="position:relative;height:10px;border-radius:10px;background:rgba(255,255,255,0.1)"><span data-bar="1" style="{{ d.bar }}"></span><span style="{{ d.tick }}"></span></span></div></sc-for>
+            <p style="margin:0;font-size:12px;color:#B9C9B5">Green bar: baseline. Yellow tick: target.</p>
+          </div>
+        </section>
+
+        <section id="m7" data-sec="7" aria-labelledby="h-m7" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m7 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 07 · Policy and evidence</p><h2 id="h-m7" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">International frameworks</h2></div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(min(100%, 360px), 1fr));gap:16px;align-items:start">
+            <sc-for list="{{ frameworks }}" as="f"><article data-m="1" style="padding:22px;border-radius:24px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);display:flex;flex-direction:column;gap:10px"><strong style="font-size:18px;font-weight:600;line-height:1.3">{{ f.n }}</strong><span style="font-size:14px;line-height:1.5;color:#DDE8D8">{{ f.d }}</span><div style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.1)"><sc-for list="{{ f.mods }}" as="m"><a href="{{ m.href }}" onClick="{{ m.go }}" style="display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:start;text-decoration:none;color:#F2F6EE;font-size:14px;line-height:1.4"><span style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center">{{ m.icon }}</span><span><strong style="color:#CDEB9A;font-weight:600">{{ m.t }}</strong> · {{ m.how }}</span></a></sc-for></div></article></sc-for>
+          </div>
+        </section>
+
+        <section id="m8" data-sec="8" aria-labelledby="h-m8" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m8 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 08 · Know the crops</p><h2 id="h-m8" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Nutrient comparison</h2></div></div>
+          <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:14px;max-width:900px">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px"><h3 style="margin:0;font-size:20px;font-weight:500">Per 100 g raw, against common vegetables</h3><div role="group" aria-label="Nutrient" style="display:flex;gap:8px"><sc-for list="{{ metChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div></div>
+            <sc-for list="{{ nutRows }}" as="d"><div style="display:grid;grid-template-columns:140px minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:14px"><span>{{ d.n }}</span><span style="height:10px;border-radius:10px;background:rgba(255,255,255,0.1);overflow:hidden"><span data-bar="1" style="{{ d.bar }}"></span></span><span style="text-align:right">{{ d.v }}</span></div></sc-for>
+            <p style="margin:0;font-size:12px;color:#B9C9B5">Green: indigenous crops. Grey: introduced vegetables. Yellow: selected crop. Compiled values (Grade C, to verify).</p>
+          </div>
+        </section>
+
+        <section id="m9" data-sec="9" aria-labelledby="h-m9" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m9 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 09 · Grow and cook</p><h2 id="h-m9" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Good practices · <span lang="rw">{{ cropName }}</span></h2></div></div>
+          <ol style="list-style:none;margin:0;padding:0 0 8px;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px, 290px);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;align-items:start">
+            <sc-for list="{{ steps }}" as="p" hint-placeholder-count="5"><li data-m="1" style="scroll-snap-align:start;padding:22px;border-radius:24px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:10px"><span style="width:36px;height:36px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;font-weight:700">{{ p.n }}</span><strong style="font-size:18px;font-weight:600">{{ p.t }}</strong><span style="font-size:14px;line-height:1.5;color:#DDE8D8">{{ p.x }}</span></li></sc-for>
+          </ol>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 360px), 1fr));gap:24px;align-items:start">
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:12px">
+              <h3 style="margin:0;font-size:20px;font-weight:500">Three simple ways to cook</h3>
+              <div style="display:flex;flex-direction:column;gap:10px"><div><strong style="color:#CDEB9A">Quick sauté.</strong> Fry chopped onion in a little oil, add tomato, then the greens. Cover and steam for 3–5 minutes.</div><div><strong style="color:#CDEB9A">Greens with groundnut paste.</strong> Blanch the leaves for 2 minutes, stir in groundnut paste and simmer 5 minutes. Softens bitterness.</div><div><strong style="color:#CDEB9A">Two-leaf mix.</strong> Cook two kinds of greens together with onion for more variety.</div></div>
+              <p style="margin:0;font-size:12px;color:#B9C9B5">Household cooking ideas, to be reviewed by nutritionists before release.</p>
+            </div>
+            <div data-m="1" style="padding:24px 28px;border-radius:28px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);display:flex;flex-direction:column;gap:8px">
+              <h3 style="margin:0 0 4px;font-size:20px;font-weight:500">Common questions</h3>
+              <details style="border-bottom:1px solid rgba(255,255,255,0.1);padding:10px 0"><summary style="cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center">Can I eat it raw? ＋</summary><p style="margin:8px 0 0;color:#DDE8D8">No. Always cook these leaves and berries.</p></details>
+              <details style="border-bottom:1px solid rgba(255,255,255,0.1);padding:10px 0"><summary style="cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center">How do I keep the vitamins? ＋</summary><p style="margin:8px 0 0;color:#DDE8D8">Cook briefly: steaming or blanching, under 10 minutes, and keep the cooking water.</p></details>
+              <details style="padding:10px 0"><summary style="cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center">Why is my harvest small? ＋</summary><p style="margin:8px 0 0;color:#DDE8D8">Check the garden planner in Module 3: spacing, manure, water, weeding and cutting method all matter.</p></details>
+            </div>
+          </div>
+        </section>
+
+        <section id="m10" data-sec="10" aria-labelledby="h-m10" style="display:flex;flex-direction:column;gap:24px">
+          <div data-m="1" style="display:flex;align-items:center;gap:16px"><span aria-hidden="true" style="width:60px;height:60px;border-radius:50%;background:#F2F6EE;color:#132219;display:flex;align-items:center;justify-content:center;flex:none">{{ mi.m10 }}</span><div><p style="margin:0 0 6px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#B9C9B5">Module 10 · Policy and evidence</p><h2 id="h-m10" style="margin:0;font-size:clamp(32px, 4.4vw, 56px);line-height:1;font-weight:500;letter-spacing:-0.02em">Sources</h2></div></div>
+          <div data-m="1" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(min(100%, 280px), 1fr));gap:12px;align-items:start">
+            <sc-for list="{{ gloss }}" as="g"><div style="padding:16px 18px;border-radius:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"><strong style="display:block;font-size:15px;margin-bottom:4px;color:#CDEB9A">{{ g.t }}</strong><span style="font-size:14px;line-height:1.45;color:#DDE8D8">{{ g.d }}</span></div></sc-for>
+          </div>
+          <div data-m="1" style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+            <label style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);flex:1 1 300px;max-width:420px"><input type="search" aria-label="Search sources" value="{{ srcQ }}" onChange="{{ onSrcQ }}" placeholder="Search by ID, title or publisher" style="flex:1;min-width:0;border:0;background:transparent;color:#F2F6EE;font-family:inherit;font-size:15px;outline:none"></label>
+            <div role="group" aria-label="Evidence grade" style="display:flex;gap:8px"><sc-for list="{{ gChips }}" as="b"><button type="button" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" title="{{ b.title }}" style="{{ b.style }}">{{ b.t }}</button></sc-for></div>
+            <span style="font-size:13px;color:#B9C9B5">{{ srcSummary }}</span>
+          </div>
+          <div data-m="1" style="border-radius:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);overflow:hidden">
+            <sc-for list="{{ sources }}" as="sx"><div id="{{ sx.domId }}" style="{{ sx.row }}"><strong style="font-size:14px;color:#CDEB9A">{{ sx.id }}</strong><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;line-height:1.35">{{ sx.t }}</span><span style="font-size:13px;color:#B9C9B5">{{ sx.p }} · {{ sx.y }} · Grade {{ sx.g }}</span></span><sc-if value="{{ sx.hasLink }}"><a href="{{ sx.link }}" target="_blank" rel="noopener noreferrer" aria-label="{{ sx.aria }}" style="display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(205,235,154,0.5);font-size:13px;font-weight:600;white-space:nowrap;text-decoration:none">Open source ↗</a></sc-if><sc-if value="{{ sx.noLink }}"><a href="{{ sx.search }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;min-height:40px;padding:0 14px;font-size:13px;white-space:nowrap">Find online ↗</a></sc-if></div></sc-for>
+            <sc-if value="{{ noSources }}"><p style="margin:0;padding:24px;color:#B9C9B5">No sources match this search.</p></sc-if>
+            <sc-if value="{{ moreSrc }}"><div style="padding:16px 22px"><button type="button" onClick="{{ showAll }}" style="min-height:44px;padding:0 20px;border-radius:999px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:#F2F6EE;font-family:inherit;font-size:14px;cursor:pointer" style-hover="background:rgba(255,255,255,0.1)">{{ moreSrcT }}</button></div></sc-if>
+          </div>
+        </section>
+        </sc-if>
+
+        <footer style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.12);font-size:13px;color:#B9C9B5"><span>© 2026 GanzAfrica · A public good, to be handed over to MINAGRI.</span><span>Every figure comes from the project dataset. Photos: Wikimedia Commons (CC BY-SA). District boundaries: geoBoundaries (CC BY 4.0).</span></footer>
+      </main>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const h=React.createElement;
+const q=v=>Math.round(v*100)/100;
+/* ---------- icon primitives (24px grid, 1.5px stroke) ---------- */
+const pp=(d,m)=>({t:'p',d,m});
+const cc=(cx,cy,r,m)=>({t:'c',cx,cy,r,m});
+function lf(x1,y1,x2,y2,w,m){const mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L*w,ny=dx/L*w;return pp(`M${q(x1)} ${q(y1)}Q${q(mx+nx)} ${q(my+ny)} ${q(x2)} ${q(y2)}Q${q(mx-nx)} ${q(my-ny)} ${q(x1)} ${q(y1)}Z`,m)}
+function ov(x1,y1,x2,y2,w,m){const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,P=(t,s)=>q(x1+dx*t+nx*w*s)+' '+q(y1+dy*t+ny*w*s);return pp(`M${q(x1)} ${q(y1)}C${P(.12,1)} ${P(.62,.9)} ${q(x2)} ${q(y2)}C${P(.62,-.9)} ${P(.12,-1)} ${q(x1)} ${q(y1)}Z`,m)}
+const rib=(x1,y1,x2,y2)=>pp(`M${x1} ${y1}L${q(x1+(x2-x1)*.7)} ${q(y1+(y2-y1)*.7)}`,'i');
+function star(cx,cy,R1,r,n,m){let d='';for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,rr=i%2?r:R1;d+=(i?'L':'M')+q(cx+rr*Math.cos(a))+' '+q(cy+rr*Math.sin(a))}return pp(d+'Z',m)}
+function lobed(x1,y1,x2,y2,hw,m){const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,A=[],B=[];for(let i=0;i<=30;i++){const t=i/30,w=hw*Math.pow(Math.sin(Math.PI*t),.75)*(1+.2*Math.cos(Math.PI*6*t));const x=x1+dx*t,y=y1+dy*t;A.push(q(x+nx*w)+' '+q(y+ny*w));B.unshift(q(x-nx*w)+' '+q(y-ny*w))}return pp('M'+A.concat(B).join('L')+'Z',m)}
+const fan=(cx,cy,L,angs,w,m)=>angs.map(a=>{const r=a*Math.PI/180;return lf(cx,cy,q(cx+L*Math.cos(r)),q(cy+L*Math.sin(r)),w,m)});
+function fileI(t){return[pp('M5.5 3h8.5l4.5 4.5V21h-13Z','f'),pp('M14 3v4.5h4.5','i'),{t:'r',x:2.5,y:11.5,w:15,h:7,m:'F'},{t:'t',x:10,y:16.6,s:5.6,txt:t}]}
+const GLASS='M16.5 10.5a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z';
+const I={
+ cInya:[pp('M12 22V7.5'),ov(12,18.5,4,13.5,3.9,'f'),rib(12,18.5,4,13.5),ov(12,14.6,19.6,10.6,3.6,'f'),rib(12,14.6,19.6,10.6),ov(12,10.8,7.6,8,2.4,'f'),lf(12,8.2,14.4,1.8,3.6,'f'),pp('M12.5 6.1l1.4-.5M13.1 4.2l1.1-.4','i')],
+ cIsogo:[pp('M11 22c0-3.6.3-7 1-10.5'),ov(11.2,18.2,3.8,15.6,3.7,'f'),rib(11.2,18.2,3.8,15.6),ov(11.9,13.6,18.4,10.8,3.3,'f'),rib(11.9,13.6,18.4,10.8),pp('M11.8 11.4c-.1-1.6-.6-3-1.4-4.2'),star(10,5,2.8,1.1,5,'f'),pp('M12.2 14l3.4 3.1M12.2 14l5.9 1.3M12.2 14l4.4 5.2'),cc(16.3,17.7,1.5,'f'),cc(19.6,15.6,1.5,'f'),cc(17.4,20.4,1.5,'f')],
+ cIsogi:[pp('M12 22V8.8'),pp('M12 17.6L8.2 15.6'),...fan(8.2,15.6,5,[150,183,216,249,282],1.9,'f'),pp('M12 13.8l3.4-1.1'),...fan(15.4,12.7,4.2,[-62,-22,18],1.8,'f'),...fan(12,8.8,2.6,[160,200,340,20],1.5,'f'),pp('M12 8.8c-.2-2.6.3-4.6 1.8-6.2M12 8.8c1-1.9 2.8-3.1 5.2-3.3M12 8.8c-1.2-1.7-3.1-2.6-5.4-2.5'),cc(13.8,2.6,.75,'F'),cc(17.2,5.5,.75,'F'),cc(6.6,6.3,.75,'F')],
+ cIntag:[pp('M12 22V10.8'),pp('M12 20.2l-1.3-.9M12 15.4l1.3-.9M12 12.4l-1.3-.9'),lobed(12,18,2.6,12.8,3.5,'f'),rib(12,18,2.6,12.8),lobed(12,14.6,19.8,16.4,2.5,'f'),pp('M12 10.8c.7-1 1.4-1.7 2.4-2.3'),cc(13.9,5.8,1.75,'f'),cc(17.4,4.6,1.75,'f'),cc(19.1,7.9,1.75,'f'),cc(15.9,9.3,1.75,'f')],
+ xCabbage:[cc(12,12.6,8.4,'f'),pp('M12 21V8.6','i'),pp('M4.6 9.4c3.3.2 6 2.6 7.4 6.4 1.4-3.8 4.1-6.2 7.4-6.4','i'),pp('M7.4 18.6c.2-3.4 1.8-6 4.6-7.8 2.8 1.8 4.4 4.4 4.6 7.8','i')],
+ xTomato:[cc(12,14,7,'f'),star(12,8,3.6,1.3,5,'i'),pp('M12 7.6V3.5'),pp('M12 4.8c1.2-1.3 2.7-1.6 4.2-1.2')],
+ xCarrot:[pp('M8 8.6h8l-3.4 12.6a.6.6 0 0 1-1.2 0Z','f'),pp('M9.3 11.6h2.2M12.8 14.4h1.8M10.7 17.2h1.5','i'),pp('M12 8.6V3M12 8.6C11.4 6.4 10 5 8 4.4M12 8.6c.6-2.2 2-3.6 4-4.2')],
+ xOnion:[pp('M12 21c-3.9 0-6.5-2.4-6.5-6 0-3.4 2.9-5.4 5-7.4.6-.6 1-1.2 1.5-1.9.5.7.9 1.3 1.5 1.9 2.1 2 5 4 5 7.4 0 3.6-2.6 6-6.5 6Z','f'),pp('M12 5.7V2.5M12 4.4c-1-.9-2-1.3-3.1-1.3'),pp('M10.4 21l-.8 1.4M12 21v1.6M13.6 21l.8 1.4'),pp('M12 18.8c-2.1 0-3.6-1.6-3.6-3.9 0-2.4 2-4 3.6-5.6','i')],
+ xBanana:[pp('M5 8.2c.3 6.8 4.9 11.3 11 11.3 2 0 3.7-.6 4.9-1.7-.5-.5-1.1-.7-1.8-.7-5.1 0-9.3-3.6-10.6-8.9Z','f'),pp('M5 8.2L4.6 5h3l.3 3.6'),pp('M8.6 11.2c1.6 3.4 4.6 5.6 8.6 6.2','i')],
+ mProfile:[lf(3,18,13.5,3,6.6,'f'),pp('M3 18L10.4 7.6','i'),cc(15.5,14.5,4.2,'f'),pp('M18.6 17.6l2.9 2.9'),pp('M13.4 13.4a2.4 2.4 0 0 1 1.9-1.3','i')],
+ mHealth:[cc(12,12,9,'f'),cc(12,12,6,'i'),pp('M6.5 12.5h2.2l1.4-2.8 2.2 5.2 1.5-3.4.9 1h2.8','i')],
+ mYields:[pp('M4.5 10.5h15l-1.6 7H6.1Z','f'),pp('M8.6 10.5l.5 7M15.4 10.5l-.5 7M5.3 14h13.4','i'),lf(9,10.5,6.2,4.6,2.8,'f'),lf(12,10.5,12.4,3,2.8,'f'),lf(15,10.5,17.8,4.6,2.8,'f'),pp('M12 17.5v3M3 20.5h18M6 20.5V22M18 20.5V22')],
+ mSuit:[pp('M2 20.5c2.2-4.6 4.6-7 7.6-7 2 0 3.4 1 4.6 2.3 1.4-1.4 2.8-2.1 4.3-2.1 1 0 2 .3 3.5 1.2v5.6Z','f'),pp('M5.2 18h5.4M7.4 15.8h3.8M14.6 18h4.6','i'),pp('M10 11.5s-3.3-3-3.3-5.5a3.3 3.3 0 0 1 6.6 0c0 2.5-3.3 5.5-3.3 5.5Z','f'),cc(10,6,1.15,'i')],
+ mCost:[pp('M3 12.5h18c0 4.4-4 8-9 8s-9-3.6-9-8Z','f'),pp('M9 21.5h6'),cc(12,6,3.3,'f'),pp('M12 4.6v2.8','i'),pp('M6.5 15.5c1 1.4 2.6 2.4 4.5 2.7','i')],
+ mPolicy:[pp('M5.5 3h9l4 4v14h-13Z','f'),pp('M14.5 3v4h4','i'),pp('M8.5 8h4M8.5 11h7','i'),cc(14,16.5,3.2,'i'),lf(12.6,17.9,15.4,15.1,1.9,'i')],
+ mIntl:[cc(10.5,10.5,7.5,'f'),pp('M3 10.5h15M10.5 3c-2.3 2-3.4 4.5-3.4 7.5S8.2 16 10.5 18M10.5 3c2.3 2 3.4 4.5 3.4 7.5S12.8 16 10.5 18','i'),lf(5.5,21.5,21.5,12,4.6,'f'),pp('M5.5 21.5L18 14.1','i')],
+ mNutri:[pp('M12 5.2V20M8.5 20.5h7M4 7h16'),cc(12,4.3,1,'F'),pp('M4.5 7v4.6M19.5 7v4.6'),lf(1.6,13.2,7.4,13.2,3.4,'f'),lf(16.6,13.2,22.4,13.2,3.4,'f'),pp('M1.6 13.2h5.8M16.6 13.2h5.8','i')],
+ mGap:[pp('M2.5 11.6c1.6 0 3 .6 4 1.8l1.8 2.2h7.4l1.8-2.2c1-1.2 2.4-1.8 4-1.8-.6 5.2-4.4 9-9.5 9s-8.9-3.8-9.5-9Z','f'),pp('M12 15.6v5','i'),pp('M12 13.6c-1.7 0-2.8-1.2-2.8-2.9s1.1-3.1 2.8-3.1 2.8 1.4 2.8 3.1-1.1 2.9-2.8 2.9Z','f'),pp('M12 7.6c0-2 1.3-3.6 3.5-4 0 2-1.4 3.6-3.5 4Z','f'),pp('M12 7.6c-.4-1.4-1.4-2.3-2.8-2.5')],
+ dSafety:[lf(4,20,20,4,11,'f'),pp('M12 8.2v4.8M12 15.7v.1','i')],
+ dSeed:[pp('M7.6 9h8.8l2.2 10.2a1.5 1.5 0 0 1-1.5 1.8H6.9a1.5 1.5 0 0 1-1.5-1.8Z','f'),pp('M9 9L8 5.4h8L15 9'),pp('M12 18.2c-1.2 0-2-.9-2-2.1s.8-2.5 2-2.5 2 1.2 2 2.5-.8 2.1-2 2.1Z','i')],
+ dKnow:[cc(9.5,7,3.2,'f'),pp('M3.5 20.5c0-3.8 2.7-6.5 6-6.5s6 2.7 6 6.5Z','f'),lf(15.5,13.5,21,6,3.8,'f'),pp('M15.5 13.5l3.9-5.3','i')],
+ dCircle:[cc(12,12,6.5,'f')],dTri:[pp('M12 5l7.5 13h-15Z','f')],dSquare:[pp('M5.8 5.8h12.4v12.4H5.8Z','f')],
+ uArrowL:[pp('M19 12H5M11 6l-6 6 6 6')],uArrowR:[pp('M5 12h14M13 6l6 6-6 6')],
+ uChevD:[pp('M6 9l6 6 6-6')],uChevU:[pp('M6 15l6-6 6 6')],uChevR:[pp('M9 6l6 6-6 6')],uChevL:[pp('M15 6l-6 6 6 6')],
+ uMenu:[pp('M4 7h16M4 12h16M4 17h16')],uClose:[pp('M6 6l12 12M18 6L6 18')],
+ uSearch:[pp(GLASS,'f'),pp('M15 15l5 5')],
+ uDownload:[pp('M12 4v11M7 10l5 5 5-5M5 20h14')],uUpload:[pp('M12 15V4M7 9l5-5 5 5M5 20h14')],
+ uAdd:[pp('M12 5v14M5 12h14')],
+ uDelete:[pp('M4 7h16M10 4h4'),pp('M6 7l1 13h10l1-13Z','f'),pp('M10 11v5.5M14 11v5.5','i')],
+ uZoomIn:[pp(GLASS,'f'),pp('M15 15l5 5'),pp('M8 10.5h5M10.5 8v5','i')],uZoomOut:[pp(GLASS,'f'),pp('M15 15l5 5'),pp('M8 10.5h5','i')],
+ uHome:[pp('M3.5 11L12 4l8.5 7'),pp('M6 9.5V20h12V9.5','f'),pp('M10 20v-5h4v5','i')],
+ uMail:[pp('M3.5 6h17v12h-17Z','f'),pp('M4 7l8 6 8-6','i')],
+ uPhone:[pp('M7 4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1Z','f'),pp('M11 18h2','i')],
+ uPrint:[pp('M7 9V4h10v5'),pp('M6 17H4V9h16v8h-2','f'),pp('M7 14h10v6.5H7Z')],
+ uA11y:[cc(12,4.8,1.6,'F'),pp('M5 8.6l7 1.6 7-1.6M12 10.2v4.8M8.8 21l3.2-6 3.2 6')],
+ uCaptions:[pp('M3 5.5h18v13H3Z','f'),pp('M10.5 10H9a1.5 1.5 0 0 0-1.5 1.5v1A1.5 1.5 0 0 0 9 14h1.5M16.5 10H15a1.5 1.5 0 0 0-1.5 1.5v1A1.5 1.5 0 0 0 15 14h1.5','i')],
+ uCsv:fileI('CSV'),uXls:fileI('XLS'),uPdf:fileI('PDF'),
+ uCopy:[pp('M8.5 8.5h11v12h-11Z','f'),pp('M5 15.5V4.5a1 1 0 0 1 1-1h10')],
+ uSun:[cc(12,12,4,'f'),pp('M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4')],
+ uMoon:[pp('M19.5 14.6A8 8 0 1 1 9.4 4.5a6.4 6.4 0 0 0 10.1 10.1Z','f')],
+ uInfo:[cc(12,12,9,'f'),pp('M12 11v5.5M12 7.8v.1','i')],
+ uWarn:[pp('M12 3.8l9 15.7H3Z','f'),pp('M12 10v4.4M12 17v.1','i')],
+ uCheck:[pp('M5 12.5l4.5 4.5L19 7')],
+ uFilter:[pp('M4 5h16l-6.2 7.6V19l-3.6-1.8v-4.6Z','f')],
+ uSort:[pp('M8 9.5l4-4 4 4M8 14.5l4 4 4-4')],
+ uReset:[pp('M4.5 12a7.5 7.5 0 1 0 2.2-5.3'),pp('M4.5 4.5v3.6h3.6')],
+ uGlobe:[cc(12,12,9,'f'),pp('M3 12h18M12 3c-2.6 2.4-3.9 5.4-3.9 9s1.3 6.6 3.9 9M12 3c2.6 2.4 3.9 5.4 3.9 9s-1.3 6.6-3.9 9','i')]
+};
+function ico(name,size,o){size=size||24;o=o||{};const els=I[name]||[];const col=o.color||'currentColor',fil=!!o.filled,inn=o.inner||'#FFFFFF';
+ return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',strokeWidth:1.5*24/size,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':o.label?undefined:true,role:o.label?'img':undefined,'aria-label':o.label,focusable:'false',style:{flex:'none',display:'block',stroke:col,overflow:'visible'}},
+ els.map((e,k)=>{const st={};if(e.m==='F'){st.fill=col;st.stroke='none'}else if(fil&&e.m==='f'){st.fill=col}else if(fil&&e.m==='i'){st.stroke=inn}
+  if(e.t==='p')return h('path',{key:k,d:e.d,style:st});if(e.t==='c')return h('circle',{key:k,cx:e.cx,cy:e.cy,r:e.r,style:st});if(e.t==='r')return h('rect',{key:k,x:e.x,y:e.y,width:e.w,height:e.h,rx:1,style:st});
+  return h('text',{key:k,x:e.x,y:e.y,textAnchor:'middle',style:{fill:inn,stroke:'none',fontSize:e.s+'px',fontWeight:800,fontFamily:'Inter,sans-serif'}},e.txt)}))}
+Object.assign(I,{
+ logo:[lf(12,21,12,4,5.5,'f'),pp('M12 21V8','i'),pp('M12 15l-3-2.5M12 12l3-2.5','i')],
+ mStart:[pp('M3.5 11L12 4l8.5 7'),pp('M6 9.5V20h12V9.5','f'),pp('M10 20v-5h4v5','i')],
+ mLearn:[pp('M3.5 5.5c2.8-1.2 5.6-1 8.5 1 2.9-2 5.7-2.2 8.5-1v13.5c-2.8-1.2-5.6-1-8.5 1-2.9-2-5.7-2.2-8.5-1Z','f'),pp('M12 6.5v13.5','i')],
+ stPub:[cc(12,12,8.5),pp('M8 12.3l2.8 2.8L16.2 9.5')],
+ stVer:[pp('M16.5 10.5a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z'),pp('M15 15l5 5'),pp('M10.5 8v3M10.5 13.2v.1')],
+ stDer:[pp('M17 5H7l5.5 7L7 19h10')],
+ stMod:[pp('M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0')],
+ stCon:[pp('M5 7h14M5 12h14M5 17h9')],
+ stNd:[pp('M4 5h16v14H4Z'),pp('M8 12h1.5M11.25 12h1.5M14.5 12h1.5')],
+ shield:[pp('M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6Z','f'),pp('M8.5 12.2l2.5 2.5 4.5-5','i')]
+});
+const IMF={isogi:'Cleome gynandra 1DS-II 6937.jpg',isogo:'Morelle ogomo, jardins du muséum de Toulouse 01.JPG',intagarasoryo:'Solanum torvum fruit and flower.jpg',inyabutongo:'Amaranthus (6).jpg',terraces:'A hill with terraces.jpg'};
+const IMG=k=>(window.__resources&&window.__resources['img-'+k])||('https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(IMF[k])+'?width=1600');
+const CI={Inyabutongo:'inyabutongo',Isogo:'isogo',Isogi:'isogi',Intagarasoryo:'intagarasoryo'};
+const TN=['Start here','Crop profile','Health burdens','Yields & inputs','Growing zones','Cost of hunger','National policies','International frameworks','Nutrient comparison','Good practices','Sources'];
+const MICON=['mStart','mProfile','mHealth','mYields','mSuit','mCost','mPolicy','mIntl','mNutri','mGap','mLearn'];
+const BC={Excellent:'#9BD35A',Good:'#4FAF6A',Fair:'#E3C55A',Limited:'#C9784A'};
+const BAND=v=>v>=80?'Excellent':v>=60?'Good':v>=40?'Fair':'Limited';
+const SDC=['#CFE8B0','#8CC66A','#4F9A46','#F6E27A'];const sdCls=v=>v<15?0:v<30?1:v<35?2:3;
+const EASE='cubic-bezier(.16,1,.3,1)';
+const num=v=>{const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?null:n};
+const r1=v=>Math.round(v*10)/10;
+
+class Component extends DCLogic {
+  state={d:null,geo:null,err:null,crop:0,fact:0,sec:0,prep:'raw',hv:'district',hd:'',hc:'',met:'Iron mg',zc:4,zp:'today',zd:'',plCrop:'',plDist:'',lang:(()=>{try{return localStorage.getItem('spa-lang')||'en'}catch(e){return 'en'}})(),plArea:'20',minF:'All',grade:'All',srcQ:'',allSrc:false,srcHi:null,w:1280};
+  rootRef=el=>{this.root=el};
+  fgo(fn){clearTimeout(this.ft);this.setState({factOut:true});this.ft=setTimeout(()=>this.setState(s=>({fact:fn(s),factOut:false})),320)}
+  setLang(l){try{localStorage.setItem('spa-lang',l)}catch(e){}this.setState({lang:l},()=>this.applyLang())}
+  applyLang(){
+    const m=this.i18n,root=this.root;if(!m||!root)return;const lang=this.state.lang;document.documentElement.lang=lang;
+    this.tx=this.tx||new WeakMap();this.ax=this.ax||new WeakMap();
+    if(this.mo)this.mo.disconnect();
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
+    while(n=w.nextNode()){const cur=n.nodeValue;if(!/[A-Za-z]{2}/.test(cur))continue;const r=this.tx.get(n);const orig=r&&r.t===cur?r.o:cur;const out=m.translate(orig,lang);if(out!==cur)n.nodeValue=out;this.tx.set(n,{o:orig,t:out})}
+    root.querySelectorAll('[aria-label],[title],[placeholder]').forEach(el=>['aria-label','title','placeholder'].forEach(a=>{const cur=el.getAttribute(a);if(!cur)return;let rec=this.ax.get(el);rec=rec||{};const r=rec[a];const orig=r&&r.t===cur?r.o:cur;const out=m.translate(orig,lang);if(out!==cur)el.setAttribute(a,out);rec[a]={o:orig,t:out};this.ax.set(el,rec)}));
+    if(!this.mo)this.mo=new MutationObserver(()=>{cancelAnimationFrame(this.mraf);this.mraf=requestAnimationFrame(()=>this.applyLang())});
+    this.mo.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder']});
+  }
+  componentDidMount(){
+    import('./data/i18n.js').then(m=>{this.i18n=m;this.langs=m.LANGS;this.forceUpdate(()=>this.applyLang())}).catch(e=>console.warn('i18n',e));
+    this.factTimer=setInterval(()=>{if(!this.factPaused&&this.state.d)this.fgo(s=>s.fact+1)},7000);
+    const R=window.__resources||{};
+    Promise.all([fetch(R.dataset||'data/dataset.json').then(r=>{if(!r.ok)throw new Error('dataset '+r.status);return r.json()}),fetch(R.districts||'data/rwanda-districts.geojson').then(r=>{if(!r.ok)throw new Error('boundaries '+r.status);return r.json()})])
+      .then(([d,geo])=>{this.prep(d,geo);this.setState({d,geo},()=>setTimeout(()=>this.intro(),30))}).catch(e=>this.setState({err:String(e.message||e)}));
+    this.onResize=()=>{const w=window.innerWidth;if(Math.abs(w-this.state.w)>4)this.setState({w})};this.onResize();window.addEventListener('resize',this.onResize);
+  }
+  componentWillUnmount(){this.mo&&this.mo.disconnect();cancelAnimationFrame(this.mraf);clearTimeout(this.fb);clearInterval(this.factTimer);clearTimeout(this.ft);window.removeEventListener('resize',this.onResize);this.io&&this.io.disconnect();this.so&&this.so.disconnect()}
+  componentDidUpdate(){if(this.lastCrop!==undefined&&this.lastCrop!==this.state.crop)this.cropSwap();this.lastCrop=this.state.crop}
+  rows(k,from){return ((this.state.d||this.D)[k]||[]).filter(x=>x.r>=(from||5)&&x.c&&x.c[0]!==''&&x.c[0]!=null)}
+  prep(d,geo){this.D=d;const g=geo;let x0=180,x1=-180,y0=90,y1=-90;const polys=f=>f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;
+    g.features.forEach(f=>polys(f).forEach(p=>p[0].forEach(([x,y])=>{if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y})));
+    const W=560,kx=Math.cos((y0+y1)/2*Math.PI/180),pad=6,s=(W-2*pad)/((x1-x0)*kx),H=Math.round((y1-y0)*s+2*pad),pr=(x,y)=>[pad+(x-x0)*kx*s,pad+(y1-y)*s];
+    const paths={};g.features.forEach(f=>{paths[f.properties.shapeName]=polys(f).map(p=>p.map(r=>'M'+r.map(([x,y])=>{const a=pr(x,y);return a[0].toFixed(1)+' '+a[1].toFixed(1)}).join('L')+'Z').join('')).join('')});
+    const dl={};(d.Districts||[]).filter(x=>x.r>=5&&x.c[0]).forEach(x=>{dl[x.c[0]]=pr(+x.c[3],+x.c[2])});
+    this.PJ={W,H,paths,dl};}
+  mapEl(o){const pj=this.PJ,pid='hatch'+o.k,KG={Nyarugenge:1,Kicukiro:1,Gasabo:1};
+    return h('svg',{viewBox:`0 0 ${pj.W} ${pj.H}`,width:'100%',role:'img','aria-label':o.aria,style:{display:'block',maxWidth:pj.W,height:'auto',margin:'0 auto',fontFamily:'Urbanist,sans-serif'}},
+      h('defs',null,h('pattern',{id:pid,width:7,height:7,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},h('rect',{width:7,height:7,fill:'rgba(255,255,255,0.06)'}),h('line',{x1:0,y1:0,x2:0,y2:7,stroke:'rgba(255,255,255,0.28)',strokeWidth:1.4}))),
+      Object.keys(pj.paths).map(n=>{const f=o.fill(n),can=!o.can||o.can(n);return h('path',{key:n,d:pj.paths[n],fill:f||`url(#${pid})`,stroke:'#132219',strokeWidth:1.2,style:{cursor:can?'pointer':'default',transition:'fill .5s'},onClick:can?()=>o.onSel(n):undefined},h('title',null,o.tip(n)))}),
+      o.sel&&pj.paths[o.sel]?h('path',{d:pj.paths[o.sel],fill:'none',stroke:'#FFFFFF',strokeWidth:3,style:{pointerEvents:'none'}}):null,
+      Object.keys(pj.paths).map(n=>{const L=o.label(n),a=pj.dl[n];if(!L||!a||KG[n])return null;return h('text',{key:'l'+n,x:a[0],y:a[1]+4,textAnchor:'middle',fontSize:12,fontWeight:700,fill:'#0E1B12',stroke:'rgba(255,255,255,0.7)',strokeWidth:2.5,paintOrder:'stroke',style:{pointerEvents:'none'}},L)}))}
+  intro(){const r=this.root;if(!r||!r.animate)return;const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fr=r.querySelector('[data-frame]'),bg=r.querySelector('[data-bg]'),hero=r.querySelector('[data-hero]');
+    const els=[...r.querySelectorAll('[data-m]')],vh=window.innerHeight;
+    if(!reduce){fr&&fr.animate([{transform:'scale(1.03)',opacity:.4},{transform:'scale(1)',opacity:1}],{duration:900,easing:EASE});
+      bg&&bg.animate([{transform:'scale(1.35)',opacity:.2},{transform:'scale(1.12)',opacity:.55}],{duration:1800,easing:EASE});
+      hero&&hero.animate([{transform:'scale(1.3)',opacity:0},{transform:'scale(1)',opacity:1}],{duration:1500,delay:120,easing:EASE,fill:'backwards'});
+      els.forEach((el,i)=>{if(el.getBoundingClientRect().top<vh)el.animate([{opacity:0,transform:'translateY(28px) scale(.98)'},{opacity:1,transform:'none'}],{duration:900,delay:250+i*90,easing:EASE,fill:'backwards'});else el.style.opacity='0'});
+      this.io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.target.style.opacity==='0'){const el=e.target;el.style.opacity='';el.animate([{opacity:0,transform:'translateY(40px) scale(.97)'},{opacity:1,transform:'none'}],{duration:850,easing:EASE});this.io.unobserve(el)}}),{root:r,rootMargin:'0px 0px -6% 0px'});
+      els.forEach(el=>this.io.observe(el));
+      r.querySelectorAll('[data-bar]').forEach((b,i)=>b.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:1100,delay:400+Math.min(i,40)*25,easing:EASE,fill:'backwards'}));
+      this.fb=setTimeout(()=>{els.forEach(el=>{if(el.style.opacity==='0')el.style.opacity=''});(r.getAnimations?r.getAnimations({subtree:true}):[]).forEach(a=>{try{a.finish()}catch(e){}})},1800)}
+    this.so=new IntersectionObserver(es=>{const hit=es.filter(e=>e.isIntersecting).pop();if(hit){const n=+hit.target.dataset.sec;if(n!==this.state.sec)this.setState({sec:n})}},{root:r,rootMargin:'-40% 0px -55% 0px'});
+    r.querySelectorAll('[data-sec]').forEach(el=>this.so.observe(el));}
+  cropSwap(){const r=this.root;if(!r)return;const hh=r.querySelector('[data-hero]');hh&&hh.animate&&hh.animate([{opacity:0,transform:'scale(1.12) rotate(-1.5deg)'},{opacity:1,transform:'none'}],{duration:800,easing:EASE});
+    r.querySelectorAll('[data-call]').forEach((c,i)=>c.animate&&c.animate([{opacity:0,transform:`translateY(${i?16:-16}px)`},{opacity:1,transform:'none'}],{duration:700,delay:120,easing:EASE,fill:'backwards'}))}
+  scrollToEl(el,off){const R=this.root;if(el&&R)R.scrollTo({top:el.getBoundingClientRect().top-R.getBoundingClientRect().top+R.scrollTop-(off||96),behavior:'smooth'})}
+  jump(m){return e=>{e&&e.preventDefault();this.scrollToEl(this.root&&this.root.querySelector('#m'+m),m===0?400:24);this.setState({sec:m})}}
+  srcLinks(str){const D=this.srcMap||{};return [...new Set(String(str||'').match(/R\d+b?/g)||[])].map(id=>({id,title:D[id]?`${D[id].c[1]} (${D[id].c[2]}, ${D[id].c[3]})`:id,style:{minHeight:26,padding:'0 7px',borderRadius:999,border:'1px solid rgba(205,235,154,0.45)',background:'transparent',color:'#CDEB9A',fontFamily:'inherit',fontSize:12,fontWeight:600,cursor:'pointer'},go:()=>{this.setState({srcHi:id,allSrc:true,srcQ:'',grade:'All'},()=>setTimeout(()=>this.scrollToEl(this.root&&this.root.querySelector('#src-'+id),120),60))}}))}
+  renderVals(){const st=this.state,d=st.d,mob=st.w<900,tab=st.w<1200,ph=st.w<700;
+    const chip=on=>({minHeight:38,padding:'0 15px',borderRadius:999,border:on?'1px solid #F2F6EE':'1px solid rgba(255,255,255,0.22)',background:on?'#F2F6EE':'transparent',color:on?'#132219':'#E4ECDF',fontFamily:'inherit',fontSize:14,fontWeight:on?600:400,cursor:'pointer',transition:'all .3s'});
+    const bar=(f,col,extra)=>Object.assign({display:'block',height:'100%',width:(Math.max(0,Math.min(1,f||0))*100).toFixed(1)+'%',borderRadius:'inherit',background:col,transformOrigin:'left center',transition:'width .8s '+EASE},extra||{});
+    const ic={logo:ico('logo',28,{color:'#2F8F3A',filled:true,inner:'#FFFFFF'})};const mi={};MICON.forEach((k,i)=>{mi['m'+i]=ico(k,28,{color:'#132219'})});
+    const base={rootRef:this.rootRef,ic,mi,loading:!d&&!st.err,failed:!!st.err,errText:st.err||'',ready:!!d,goTop:this.jump(0),
+      bgStyle:{position:'absolute',left:0,top:0,width:'100%',height:1300,backgroundImage:`url("${IMG('terraces')}")`,backgroundSize:'cover',backgroundPosition:'center',opacity:.55,transform:'scale(1.12)',zIndex:-2},
+      headerStyle:ph?{position:'sticky',top:0,zIndex:40,display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,padding:'calc(10px + env(safe-area-inset-top)) 16px 10px',background:'rgba(19,34,25,0.88)',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)',borderBottom:'1px solid rgba(255,255,255,0.1)'}:{position:'relative',zIndex:30,display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,padding:'16px clamp(16px, 3vw, 32px)'},
+      subStyle:{display:ph?'none':'block',fontSize:12,color:'#B9C9B5'},
+      mainStyle:{minWidth:0,display:'flex',flexDirection:'column',gap:ph?44:'clamp(56px, 7vw, 104px)',paddingBottom:ph?'calc(88px + env(safe-area-inset-bottom))':0},
+      gridStyle:{display:'grid',gridTemplateColumns:mob?'minmax(0,1fr)':'84px minmax(0,1fr)',gap:mob?16:28,padding:ph?'12px 14px 32px':'0 clamp(12px, 3vw, 32px) 32px'},
+      railStyle:ph?{position:'fixed',left:0,right:0,bottom:0,zIndex:50,display:'flex',gap:2,overflowX:'auto',padding:'8px 8px calc(8px + env(safe-area-inset-bottom))',background:'rgba(19,34,25,0.94)',backdropFilter:'blur(16px)',WebkitBackdropFilter:'blur(16px)',borderTop:'1px solid rgba(255,255,255,0.14)',borderRadius:'22px 22px 0 0',boxShadow:'0 -8px 24px rgba(0,0,0,0.35)',scrollbarWidth:'none',scrollSnapType:'x proximity'}:mob?{position:'sticky',top:8,zIndex:25,display:'flex',gap:8,overflowX:'auto',padding:'8px 4px',background:'rgba(19,34,25,0.92)',borderRadius:20,scrollbarWidth:'none'}:{position:'sticky',top:16,alignSelf:'start',display:'flex',flexDirection:'column',gap:6,paddingTop:8,maxHeight:'calc(100vh - 56px)',overflowY:'auto',scrollbarWidth:'none'},
+      rail:TN.map((t,i)=>{const on=st.sec===i;return {t,aria:`Module ${i}: ${t}`,href:'#m'+i,go:this.jump(i),cur:on?'true':undefined,icon:ico(MICON[i],22,{color:on?'#132219':'#E4ECDF',filled:on,inner:on?'#F2F6EE':'#132219'}),
+        style:{display:'flex',flexDirection:'column',alignItems:'center',gap:4,padding:'8px 4px',minWidth:mob?72:0,borderRadius:18,textDecoration:'none',background:on?'#F2F6EE':'transparent',color:on?'#132219':'#E4ECDF',transition:'background .35s, color .35s',flex:'none'},
+        lab:{fontSize:10.5,lineHeight:1.15,textAlign:'center',fontWeight:on?700:500,maxWidth:76}}}),
+      langBox:{display:'inline-flex',gap:2,padding:3,borderRadius:999,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.14)',flex:'none'},
+      langs:[['en','EN','English'],['rw','RW','Kinyarwanda'],['fr','FR','Français']].map(([code,label,name])=>{const on=st.lang===code;return {code,label,name,on:on?'true':'false',pick:()=>this.setLang(code),style:{minHeight:ph?38:40,minWidth:ph?44:48,padding:'0 12px',borderRadius:999,border:0,background:on?'#F2F6EE':'transparent',color:on?'#132219':'#E4ECDF',fontFamily:'inherit',fontSize:13,fontWeight:700,letterSpacing:'0.04em',cursor:'pointer',transition:'background .25s, color .25s'}}}),
+      curChip:{display:'none',alignItems:'center',minHeight:42,padding:'0 16px',borderRadius:999,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.14)',fontSize:13,color:'#E4ECDF',whiteSpace:'nowrap'},curLabel:`Module ${st.sec} · ${TN[st.sec]}`};
+    if(!d||!this.PJ)return base;
+    const crops=this.rows('Crops').filter(x=>CI[x.c[0]]);const ci=Math.min(st.crop,crops.length-1),c=crops[ci].c,CN=crops.map(x=>x.c[0]);
+    if(!this.srcMap){this.srcMap={};this.rows('Sources').forEach(x=>{if(/^R\d/.test(x.c[0]))this.srcMap[x.c[0]]=x})}
+    const nut=this.rows('Nutrients'),nx=nut.find(x=>x.c[0]===c[0]).c,ns=this.rows('Nutrient_score').filter(x=>num(x.c[4])!=null);
+    const facts=this.rows('Facts'),fi=((st.fact%facts.length)+facts.length)%facts.length;
+    const pf=(ind,geo)=>{const x=this.rows('Published_figures').find(y=>y.c[1]===ind&&(!geo||y.c[4]===geo));return x?x.c:null};
+    const fmt=(v,u)=>u==='%'?(num(v)<1&&num(v)>0?r1(num(v)*100):v)+'%':u==='US$ million'?'US$'+v+'M':u==='US$ billion'?'US$'+v+'B':u==='RWF billion'?'RWF '+v+'B':u&&u!=='count'?v+' '+u:v;
+    const tr=this.rows('Stunting_trend').filter(x=>/^\d{4}$/.test(x.c[0]));
+    // health
+    const sdRows=this.rows('Stunting_district_2025').filter(x=>num(x.c[2])!=null&&x.c[1]);const sd={};sdRows.forEach(x=>sd[x.c[0]]=x);
+    const natX=(d.Stunting_district_2025||[]).find(x=>/^National stunting/.test(x.c[0]));const natV=natX?num(natX.c[2]):26.8;
+    const above=sdRows.filter(x=>num(x.c[2])>30).length;
+    const br=this.rows('Stunting_breakdown_2025'),groups=[...new Set(br.map(x=>x.c[0]))];
+    const hvOpts=[{v:'district',t:'District (published only)'},...groups.map(g=>({v:g,t:g==='Residence'?'Urban / rural':g.replace("'",'’')})),{v:'trend',t:'Trend since 2000'}];
+    const hv=hvOpts.some(o=>o.v===st.hv)?st.hv:'district';const srcCh=s=>this.srcLinks(s);
+    const kStyle=col=>({padding:'20px 22px',borderRadius:24,background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.14)',borderTop:`3px solid ${col}`,display:'flex',flexDirection:'column',gap:6});
+    let h2Label,h2Opts,h2v,onH2,hCards,hRows,hChartT,hChartNote;
+    if(hv==='district'){const dx=sd[st.hd]||sdRows[0];h2Label='District';h2Opts=sdRows.map(x=>({v:x.c[0],t:x.c[0]}));h2v=dx.c[0];onH2=e=>this.setState({hd:e.target.value});
+      hCards=[{label:'Rwanda, 2025',v:natV+'%',sub:'Children under 5 stunted ·',srcs:srcCh(natX&&natX.c[3]),style:kStyle('#9BD35A')},{label:dx.c[0]+', 2025',v:dx.c[2]+'%',sub:`${num(dx.c[6])>0?'+':''}${dx.c[6]} pts vs national · rank ${dx.c[5]} of ${sdRows.length} ·`,srcs:srcCh(dx.c[3]),style:kStyle('#F6E27A')},{label:'Published districts',v:`${sdRows.length} / 30`,sub:'The rest are not estimated',srcs:[],style:kStyle('#8DB8F2')},{label:'Published districts above 30%',v:String(above),sub:'Derived from published values',srcs:[],style:kStyle('#F08A4B')}];
+      hRows=[...sdRows].sort((a,b)=>num(b.c[2])-num(a.c[2])).map(x=>({n:x.c[0],v:x.c[2]+'%',ls:{fontWeight:x.c[0]===dx.c[0]?700:400,color:x.c[0]===dx.c[0]?'#F6E27A':'#F2F6EE'},bar:bar(num(x.c[2])/45,x.c[0]===dx.c[0]?'#F6E27A':SDC[Math.min(2,sdCls(num(x.c[2])))])}));hChartT='Published districts, ranked';hChartNote='Source: RDHS 2025 launch (R03, R04), to verify against the NISR district table.';}
+    else if(hv==='trend'){const yx=tr.find(x=>x.c[0]===st.hc)||tr[tr.length-1];h2Label='Survey year';h2Opts=tr.map(x=>({v:x.c[0],t:x.c[0]}));h2v=yx.c[0];onH2=e=>this.setState({hc:e.target.value});
+      const pa=this.rows('Stunting_trend').find(x=>/^Pace achieved/.test(x.c[0])),pn=this.rows('Stunting_trend').find(x=>/^Pace needed/.test(x.c[0]));
+      hCards=[{label:'Rwanda, '+yx.c[0],v:yx.c[1]+'%',sub:'Children under 5 stunted ·',srcs:srcCh(yx.c[2]),style:kStyle('#9BD35A')},{label:'Change vs previous survey',v:yx.c[4]===''?'First survey':`${num(yx.c[4])>0?'+':''}${yx.c[4]} pts`,sub:'Derived',srcs:[],style:kStyle('#F6E27A')},{label:'Change since '+tr[0].c[0],v:`${r1(num(yx.c[1])-num(tr[0].c[1]))} pts`,sub:'Derived',srcs:[],style:kStyle('#8DB8F2')},{label:'Pace needed to reach 15% by 2029',v:pn?pn.c[1]+' pts/yr':'',sub:pa?`Achieved 2020–2025: ${pa.c[1]} pts/yr`:'',srcs:[],style:kStyle('#F08A4B')}];
+      hRows=tr.map(x=>({n:x.c[0],v:x.c[1]+'%',ls:{fontWeight:x.c[0]===yx.c[0]?700:400,color:x.c[0]===yx.c[0]?'#F6E27A':'#F2F6EE'},bar:bar(num(x.c[1])/60,x.c[0]===yx.c[0]?'#F6E27A':'#9BD35A')}));hChartT='National stunting, 2000–2025';hChartNote='2005 is shown on WHO 2006 standards. Sources: R01, R05, R10, R21.';}
+    else{const rows=br.filter(x=>x.c[0]===hv),cx=rows.find(x=>x.c[1]===st.hc)||rows[0],srt=[...rows].sort((a,b)=>num(b.c[2])-num(a.c[2])),hi=srt[0],lo=srt[srt.length-1];const lab=hvOpts.find(o=>o.v===hv).t;
+      h2Label=lab;h2Opts=rows.map(x=>({v:x.c[1],t:x.c[1]}));h2v=cx.c[1];onH2=e=>this.setState({hc:e.target.value});
+      hCards=[{label:'Rwanda, 2025',v:natV+'%',sub:'National average ·',srcs:srcCh('R01'),style:kStyle('#9BD35A')},{label:cx.c[1]+', 2025',v:cx.c[2]+'%',sub:`${num(cx.c[3])>0?'+':''}${cx.c[3]} pts vs national · rank ${srt.indexOf(cx)+1} of ${rows.length}`,srcs:[],style:kStyle('#F6E27A')},{label:'Highest: '+hi.c[1],v:hi.c[2]+'%',sub:'Published',srcs:[],style:kStyle('#F08A4B')},{label:`Gap to lowest (${lo.c[1]})`,v:r1(num(hi.c[2])-num(lo.c[2]))+' pts',sub:'Derived',srcs:[],style:kStyle('#8DB8F2')}];
+      hRows=rows.map(x=>({n:x.c[1],v:x.c[2]+'%',ls:{fontWeight:x===cx?700:400,color:x===cx?'#F6E27A':'#F2F6EE'},bar:bar(num(x.c[2])/45,x===cx?'#F6E27A':'#9BD35A')}));hChartT=`Stunting by ${lab.toLowerCase()}, 2025`;hChartNote=`National average ${natV}%. Source: RDHS 2025, Table 13 (R01).`;}
+    const hdSel=hv==='district'?h2v:null;
+    // zones
+    const suit=this.rows('Suitability_model').filter(x=>num(x.c[5])!=null);const zc=st.zc,b0=10+4*zc,zLab=zc===4?'all four crops':CN[zc];
+    const scoreOf=x=>st.zp==='today'?num(x.c[b0]):num(x.c[b0+1]),bandOf=x=>st.zp==='today'?x.c[b0+3]:BAND(num(x.c[b0+1]));
+    const zMapD={};suit.forEach(x=>zMapD[x.c[0]]=x);const zd=zMapD[st.zd]?st.zd:[...suit].sort((a,b)=>scoreOf(b)-scoreOf(a))[0].c[0],zr=zMapD[zd];
+    const zCnt={Excellent:0,Good:0,Fair:0,Limited:0};suit.forEach(x=>zCnt[bandOf(x)]++);
+    // policy
+    const pol=this.rows('Policies').filter(x=>x.c[3]),mins=['All',...new Set(pol.map(x=>x.c[2]).filter(Boolean))];
+    const tg=this.rows('Targets').filter(x=>num(x.c[1])!=null&&num(x.c[2])!=null);const tmx=Math.max(...tg.map(x=>Math.max(num(x.c[1]),num(x.c[2]))));
+    // frameworks
+    const fwRows=this.rows('Frameworks').filter(x=>/^\d+$/.test(String(x.c[2]).trim()));const fwMap={};fwRows.forEach(x=>{(fwMap[x.c[0]]=fwMap[x.c[0]]||{n:x.c[0],d:x.c[1],mods:[]}).mods.push(x)});
+    // nutrients
+    const metCol={'Iron mg':3,'Vitamin C mg':4,'Protein g':5}[st.met];const nr=nut.filter(x=>num(x.c[metCol])!=null).sort((a,b)=>num(b.c[metCol])-num(a.c[metCol]));const nmx=num(nr[0].c[metCol]);
+    // planner
+    const plc=crops.find(x=>x.c[0]===st.plCrop)||crops[ci],area=Math.max(0,num(st.plArea)||0),lo=num(plc.c[9]),hi=num(plc.c[10]);const pci=Math.max(0,CN.indexOf(plc.c[0])),pb=10+4*pci,pdN=suit.some(x=>x.c[0]===st.plDist)?st.plDist:[...suit].map(x=>x.c[0]).sort()[0],pdr=suit.find(x=>x.c[0]===pdN),pSc=num(pdr.c[pb]),pBand=pdr.c[pb+3],pFac=0.5+0.5*Math.min(100,Math.max(0,pSc))/100;
+    // sources
+    const q=st.srcQ.trim().toLowerCase(),allS=Object.values(this.srcMap),grades=[...new Set(allS.map(x=>x.c[5]).filter(Boolean))].sort();
+    const fs=allS.filter(x=>(st.grade==='All'||x.c[5]===st.grade)&&(!q||(x.c[0]+' '+x.c[1]+' '+x.c[2]).toLowerCase().includes(q)));
+    const showS=(st.allSrc||q||st.grade!=='All')?fs:fs.slice(0,12);
+    const gDef={A:'Measured in Rwanda',B:'National survey or official',C:'Compiled or international',D:'Expert or community'};
+    const T=[['Child stunting, under 5','Rwanda, 2025','Child stunting','mHealth'],['Child anaemia, 6-59 months','Rwanda, 2019-20','Child anaemia','mHealth'],['NCD share of facility deaths','Rwanda, 2025','NCD share of deaths','mPolicy'],['Annual cost of child undernutrition','Published 2014','Yearly cost of undernutrition','mCost']];
+    const heroH=ph?340:mob?420:tab?560:720;
+    return Object.assign(base,{
+      heroGrid:{display:'grid',gridTemplateColumns:mob?'minmax(0,1fr)':tab?'84px minmax(0,1fr)':'92px minmax(0,1fr) minmax(300px,360px)',gap:24,alignItems:'center'},
+      thumbCol:{display:'flex',flexDirection:mob?'row':'column',gap:12,order:mob?2:0,justifyContent:mob?'center':'flex-start'},
+      heroBox:{position:'relative',height:heroH,minWidth:0},
+      heroStyle:{position:'absolute',inset:0,backgroundImage:`url("${IMG(CI[c[0]])}")`,backgroundSize:'cover',backgroundPosition:'center',borderRadius:48,WebkitMaskImage:'radial-gradient(ellipse 70% 66% at 50% 46%, #000 58%, transparent 100%)',maskImage:'radial-gradient(ellipse 70% 66% at 50% 46%, #000 58%, transparent 100%)'},
+      heroAlt:`${c[0]} (${c[1]}, ${c[2]})`,cropName:c[0],cropSub:`${c[1]} · ${c[2]} · ${c[3]} · ${c[4]}`,
+      c1:{k:'Iron',sub:'per 100 g, raw',v:nx[3]+' mg'},c2:{k:'Ready to harvest',sub:/perennial/i.test(c[7])?'perennial shrub':`${c[7]}–${c[8]} harvests per season`,v:`${c[5]}–${c[6]} days`},
+      thumbs:crops.map((x,i)=>({name:x.c[0],bg:({display:'block',width:'100%',height:'100%',backgroundSize:'cover',backgroundPosition:'center',backgroundImage:`url("${IMG(CI[x.c[0]])}")`}),on:i===ci?'true':'false',pick:()=>this.setState({crop:i}),style:{width:mob?72:92,height:mob?72:92,padding:0,borderRadius:22,overflow:'hidden',cursor:'pointer',border:i===ci?'2px solid #F2F6EE':'1px solid rgba(255,255,255,0.2)',background:'rgba(255,255,255,0.08)',transform:i===ci?'scale(1.06)':'scale(1)',boxShadow:i===ci?'0 10px 30px rgba(0,0,0,0.35)':'none',transition:'transform .45s '+EASE+', box-shadow .45s',flex:'none'}})),
+      pauseFact:()=>{this.factPaused=true},resumeFact:()=>{this.factPaused=false},factDots:facts.map((_,i)=>({label:'Fact '+(i+1),go:()=>this.fgo(()=>i),style:{width:i===fi?18:8,height:8,borderRadius:8,background:i===fi?'#F6E27A':'rgba(255,255,255,0.35)',transition:'width .2s'}})),factStyle:{margin:0,fontSize:'clamp(18px, 1.6vw, 21px)',lineHeight:1.5,color:'#F2F6EE',textWrap:'pretty',minHeight:'7.5em',display:'flex',alignItems:'center',justifyContent:'center',transition:'opacity .35s ease, transform .35s ease, filter .35s ease',opacity:st.factOut?0:1,transform:st.factOut?'translateY(8px)':'none',filter:st.factOut?'blur(3px)':'none'},factPos:`${fi+1} / ${facts.length}`,fact:facts[fi].c[0],prevFact:()=>this.fgo(s=>s.fact-1),nextFact:()=>this.fgo(s=>s.fact+1),
+      trend:tr.map(x=>({y:x.c[0],v:x.c[1]+'%',bar:bar(num(x.c[1])/60,'linear-gradient(90deg,#7DBE45,#B6E36F)')})),trendSrc:srcCh(tr.map(x=>x.c[2]).join(',')),
+      tiles:T.map(([i,g,lab,icn])=>{const x=pf(i,g);return x?{label:lab,v:fmt(x[2],x[3]),sub:`${x[4]} · ${x[7]} ·`,srcs:srcCh(x[5]),icon:ico(icn,20,{color:'#DDE8D8'})}:null}).filter(Boolean),
+      cropGrid:{display:'grid',gridTemplateColumns:mob?'repeat(2, minmax(0,1fr))':'repeat(4, minmax(0,1fr))',gap:mob?12:20},
+      cards:crops.map((x,i)=>({n:String(i+1).padStart(2,'0'),name:x.c[0],en:x.c[1],sp:x.c[2],part:x.c[4],days:`${x.c[5]}–${x.c[6]} days`,bg:({display:'block',width:'100%',height:'100%',backgroundSize:'cover',backgroundPosition:'center',backgroundImage:`url("${IMG(CI[x.c[0]])}")`}),alt:`${x.c[0]}, ${x.c[1]}`,on:i===ci?'true':'false',pick:()=>this.setState({crop:i}),
+        style:{display:'flex',flexDirection:'column',gap:14,padding:12,paddingBottom:20,borderRadius:28,cursor:'pointer',fontFamily:'inherit',color:'#F2F6EE',minWidth:0,background:i===ci?'rgba(246,226,122,0.16)':'rgba(255,255,255,0.06)',border:i===ci?'1px solid #F6E27A':'1px solid rgba(255,255,255,0.14)',transition:'transform .45s '+EASE+', background .35s, border-color .35s'}})),
+      prepChips:[['raw','Raw'],['cooked','Cooked']].map(([k,t])=>({t,on:st.prep===k?'true':'false',pick:()=>this.setState({prep:k}),style:chip(st.prep===k)})),prepLabel:st.prep==='raw'?'raw':'after cooking',
+      about:[{k:'Species',v:c[2]},{k:'Family',v:c[3]},{k:'Part eaten',v:c[4]},{k:'Days to first harvest',v:`${c[5]}–${c[6]} days`},{k:'Harvests per season',v:/perennial/i.test(c[7])?'Perennial':`${c[7]}–${c[8]}`},{k:'Yield range',v:`${c[9]}–${c[10]} kg/m² per season`},{k:'Improved practice',v:`${c[11]} kg/m² per season`},{k:'Market price',v:/no documented/i.test(c[13])?'No documented price yet':c[13]}],
+      nutr:st.prep==='raw'?[['Iron',nx[3]+' mg'],['Vitamin C',nx[4]+' mg'],['Protein',nx[5]+' g']].map(([k,v])=>({k,v,vs:{fontWeight:600}})):[{k:'Vitamin C (low–high)',v:`${nx[6]}–${nx[7]} mg`,vs:{fontWeight:600}},{k:'Iron',v:'No cooked value yet',vs:{fontWeight:400,color:'#B9C9B5',fontStyle:'italic'}},{k:'Protein',v:'No cooked value yet',vs:{fontWeight:400,color:'#B9C9B5',fontStyle:'italic'}}],
+      scoreRows:[...ns].sort((a,b)=>num(b.c[4])-num(a.c[4])).map(x=>({n:x.c[0],v:x.c[4],bar:bar(num(x.c[4])/100,x.c[0]===c[0]?'#F6E27A':CI[x.c[0]]?'#9BD35A':'rgba(255,255,255,0.35)')})),
+      hv,hvOpts,onHv:e=>this.setState({hv:e.target.value,hc:''}),h2Label,h2Opts,h2v,onH2,resetH:()=>this.setState({hv:'district',hd:'',hc:''}),hCards,hRows,hChartT,hChartNote,hIsDist:hv==='district',
+      hMap:hv==='district'?this.mapEl({k:'sd',aria:`Map of child stunting by district, 2025. ${sdRows.length} districts have published values.`,fill:n=>sd[n]?SDC[sdCls(num(sd[n].c[2]))]:null,label:n=>sd[n]?sd[n].c[2]:null,sel:hdSel,can:n=>!!sd[n],onSel:n=>this.setState({hd:n}),tip:n=>sd[n]?`${n}: ${sd[n].c[2]}% (2025)`:`${n}: no published value`}):null,
+      hLegend:[['Below 15%',SDC[0]],['15–29.9%',SDC[1]],['30–34.9%',SDC[2]],['35% and above',SDC[3]]].map(([t,col])=>({t,sw:{width:18,height:12,borderRadius:3,background:col}})),
+      fiRows:this.rows('Food_insecurity_province').map(x=>({n:x.c[0],v:x.c[1]+'%',bar:bar(num(x.c[1])/40,'#F08A4B')})),
+      natInd:this.rows('Health_indicators').filter(x=>!/^Child stunting/.test(x.c[0])).map(x=>({k:x.c[0],g:x.c[3],v:fmt(x.c[1],x.c[2])})),
+      yRows:crops.map(x=>({n:x.c[0],v:`${x.c[9]}–${x.c[10]} · ${x.c[11]}`,rng:{position:'absolute',top:0,bottom:0,left:(num(x.c[9])/5*100)+'%',width:((num(x.c[10])-num(x.c[9]))/5*100)+'%',minWidth:6,borderRadius:14,background:x.c[0]===c[0]?'#F6E27A':'#9BD35A'},mk:{position:'absolute',top:-3,width:10,height:20,borderRadius:3,background:'#FFFFFF',left:`calc(${num(x.c[11])/5*100}% - 5px)`}})),
+      dRows:crops.map(x=>({n:x.c[0],v:`${x.c[5]}–${x.c[6]} days`,rng:{position:'absolute',top:0,bottom:0,left:(num(x.c[5])/200*100)+'%',width:((num(x.c[6])-num(x.c[5]))/200*100)+'%',minWidth:6,borderRadius:14,background:x.c[0]===c[0]?'#F6E27A':'#8DB8F2'}})),
+      cropOpts:CN.map(n=>({v:n,t:n})),plCrop:plc.c[0],onPlCrop:e=>this.setState({plCrop:e.target.value}),plArea:st.plArea,onPlArea:e=>this.setState({plArea:e.target.value}),
+      plOut:area>0?`${r1(area*lo*pFac)}–${r1(area*hi*pFac)} kg`:'Enter an area',plNote:`Derived: ${area||0} m² × published yield ${plc.c[9]}–${plc.c[10]} kg/m² × district factor ${pFac.toFixed(2)}. With improved practice: about ${r1(area*num(plc.c[11])*pFac)} kg.`,plDist:pdN,onPlDist:e=>this.setState({plDist:e.target.value}),plSuit:`${pdN}: ${pBand} (${Math.round(pSc)}/100)`,plSuitNote:'Modelled soil and climate suitability for this crop. Factor = 0.5 + 0.5 × score ÷ 100, so poorer sites yield less.',
+      zChips:[...CN.map((n,i)=>[i,n]),[4,'All four']].map(([i,t])=>({t,on:zc===i?'true':'false',pick:()=>this.setState({zc:i}),style:chip(zc===i)})),
+      zpChips:[['today','Today'],['2050s','2050s (+1.8 °C)']].map(([k,t])=>({t,on:st.zp===k?'true':'false',pick:()=>this.setState({zp:k}),style:chip(st.zp===k)})),
+      distOpts:[...suit].map(x=>x.c[0]).sort().map(n=>({v:n,t:n})),zd,onZd:e=>this.setState({zd:e.target.value}),
+      zTitle:`Modelled suitability: ${zLab}, ${st.zp==='today'?'today':'2050s'}`,
+      zMap:this.mapEl({k:'su',aria:`Map of modelled suitability for ${zLab}.`,fill:n=>zMapD[n]?BC[bandOf(zMapD[n])]:null,label:n=>zMapD[n]?String(Math.round(scoreOf(zMapD[n]))):null,sel:zd,onSel:n=>this.setState({zd:n}),tip:n=>zMapD[n]?`${n}: ${scoreOf(zMapD[n])} (${bandOf(zMapD[n])}) · Model`:n}),
+      zLegend:['Excellent','Good','Fair','Limited'].map(t=>({t,n:zCnt[t],sw:{width:18,height:12,borderRadius:3,background:BC[t]}})),
+      zSub:`${zr.c[1]} Province · ${zr.c[2]}`,zDetail:[{k:`Score today (${zLab})`,v:zr.c[b0]},{k:'Score in the 2050s',v:zr.c[b0+1]},{k:'Change (points)',v:`${num(zr.c[b0+2])>0?'+':''}${zr.c[b0+2]}`},{k:'Band',v:bandOf(zr)},{k:'Elevation',v:zr.c[5]+' m'},{k:'Rainfall',v:zr.c[6]+' mm'},{k:'Mean temperature',v:`${zr.c[7]} °C → ${zr.c[8]} °C (2050s)`},{k:'Soil pH (estimated)',v:zr.c[9]}],
+      cost:this.rows('Cost_of_hunger').filter(x=>num(x.c[1])!=null).map(x=>({label:x.c[0],v:fmt(x.c[1],x.c[2]),st:x.c[4]+' ·',srcs:srcCh(x.c[3])})),
+      pace:(()=>{const pa=this.rows('Stunting_trend').find(x=>/^Pace achieved/.test(x.c[0])),pn=this.rows('Stunting_trend').find(x=>/^Pace needed/.test(x.c[0]));return [pa,pn].filter(Boolean).map((x,i)=>({n:x.c[0],v:x.c[1],bar:bar(num(x.c[1])/3.5,i?'#F6E27A':'#9BD35A')}))})(),
+      minChips:mins.map(m=>({t:m,on:st.minF===m?'true':'false',pick:()=>this.setState({minF:m}),style:chip(st.minF===m)})),
+      policies:pol.filter(x=>st.minF==='All'||x.c[2]===st.minF).map(x=>({n:x.c[0],meta:[x.c[1],x.c[2]].filter(Boolean).join(' · '),what:x.c[3],align:x.c[4],st:(x.c[8]||'')+' ·',srcs:srcCh(x.c[7])})),
+      targets:tg.map(x=>({n:x.c[0],v:`${x.c[1]}% → ${x.c[2]}%`,bar:bar(num(x.c[1])/tmx,'#9BD35A',{position:'absolute',left:0,top:0}),tick:{position:'absolute',top:-4,bottom:-4,width:4,borderRadius:2,background:'#F6E27A',left:`calc(${(num(x.c[2])/tmx*100).toFixed(1)}% - 2px)`}})),
+      frameworks:Object.values(fwMap).map(f=>({n:f.n,d:f.d,mods:f.mods.map(x=>{const m=+x.c[2];return {t:`Module ${m} · ${TN[m]||''}`,how:x.c[3],href:'#m'+m,go:this.jump(m),icon:ico(MICON[m]||'mStart',16,{color:'#DDE8D8'})}})})),
+      metChips:[['Iron mg','Iron'],['Vitamin C mg','Vitamin C'],['Protein g','Protein']].map(([k,t])=>({t,on:st.met===k?'true':'false',pick:()=>this.setState({met:k}),style:chip(st.met===k)})),
+      nutRows:nr.map(x=>({n:x.c[0],v:x.c[metCol]+' '+st.met.split(' ').pop(),bar:bar(num(x.c[metCol])/nmx,x.c[0]===c[0]?'#F6E27A':/Indigenous/i.test(x.c[1])?'#9BD35A':'rgba(255,255,255,0.35)')})),
+      steps:this.rows('Practice_steps').filter(x=>x.c[0]===c[0]).map(x=>({n:x.c[1],t:x.c[2],x:x.c[4]})),
+      gloss:this.rows('Glossary').map(x=>({t:x.c[0],d:x.c[1]})),
+      srcQ:st.srcQ,onSrcQ:e=>this.setState({srcQ:e.target.value}),
+      gChips:['All',...grades].map(g=>({t:g==='All'?'All grades':'Grade '+g,title:gDef[g]||'',on:st.grade===g?'true':'false',pick:()=>this.setState({grade:g}),style:chip(st.grade===g)})),
+      srcSummary:`${fs.length} of ${allS.length} sources`,
+      moreSrc:showS.length<fs.length,moreSrcT:`Show all ${fs.length} sources`,showAll:()=>this.setState({allSrc:true}),noSources:!fs.length,
+      sources:showS.map(x=>{const link=/^https?:\/\//.test(x.c[4]||'')?x.c[4]:'';return {domId:'src-'+x.c[0],id:x.c[0],t:x.c[1],p:x.c[2],y:x.c[3],g:x.c[5],link,hasLink:!!link,noLink:!link,aria:`Open source ${x.c[0]} in a new tab`,search:'https://www.google.com/search?q='+encodeURIComponent('"'+x.c[1]+'" '+x.c[2]),
+        row:{display:'grid',gridTemplateColumns:mob?'52px minmax(0,1fr)':'64px minmax(0,1fr) auto',gap:'8px 16px',alignItems:'center',padding:'14px 22px',borderBottom:'1px solid rgba(255,255,255,0.08)',background:st.srcHi===x.c[0]?'rgba(246,226,122,0.18)':'transparent',transition:'background .6s'}}})});
+  }
+}
+</script>
+</body>
+</html>

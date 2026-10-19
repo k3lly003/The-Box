@@ -4,6 +4,7 @@ const LR = window.LR = window.LR || {};
 /* Basemaps: swap in NLA's own orthophoto or tile service here (XYZ raster tiles). Keys are used by the Layers panel. */
 LR.BASEMAPS = {
   streets:{label:'Streets', tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'], tileSize:256, maxzoom:16, attribution:'Basemap © Esri, HERE, Garmin, © OpenStreetMap contributors'},
+  topo:{label:'Topographic', tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'], tileSize:256, maxzoom:19, attribution:'Basemap © Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors'},
   sat:{label:'Satellite', tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize:256, maxzoom:19, attribution:'Imagery © Esri'}
 };
 /* Find my land framing: old parcel ≈ widthShare of the map width, at most maxHeightShare of the free height, never closer than minSpanM across. */
@@ -16,8 +17,8 @@ function hatchImg(color, bg){
   return x.getImageData(0,0,n,n);
 }
 function style(){const B=LR.BASEMAPS,src=k=>({type:'raster',tiles:B[k].tiles,tileSize:B[k].tileSize||256,maxzoom:B[k].maxzoom||19,attribution:B[k].attribution||''});return{version:8,sources:{
-  sat:src('sat'),streets:src('streets')},
-  layers:[{id:'bg',type:'background',paint:{'background-color':'#EEF1F4'}},{id:'streets',type:'raster',source:'streets',paint:{'raster-opacity':1,'raster-opacity-transition':{duration:600}}},{id:'sat',type:'raster',source:'sat',layout:{visibility:'none'},paint:{'raster-opacity':1}}]};}
+  sat:src('sat'),streets:src('streets'),topo:src('topo')},
+  layers:[{id:'bg',type:'background',paint:{'background-color':'#EEF1F4'}},{id:'streets',type:'raster',source:'streets',paint:{'raster-opacity':1,'raster-opacity-transition':{duration:600}}},{id:'topo',type:'raster',source:'topo',layout:{visibility:'none'},paint:{'raster-opacity':1}},{id:'sat',type:'raster',source:'sat',layout:{visibility:'none'},paint:{'raster-opacity':1}}]};}
 
 class LRMap{
   constructor(el,o={}){
@@ -31,7 +32,7 @@ class LRMap{
   }
   on(n,f){(this.h[n]=this.h[n]||[]).push(f);return this;} emit(n,a){(this.h[n]||[]).forEach(f=>f(a));}
   destroy(){try{this._ro.disconnect();this.clearMarkers();if(this.cmp)this.cmp.destroy();this.map.remove();}catch(e){}}
-  setBasemap(b){const m=this.map;m.setLayoutProperty('streets','visibility',b==='streets'?'visible':'none');m.setLayoutProperty('sat','visibility',b==='sat'?'visible':'none');this.basemap=b;}
+  setBasemap(b){const m=this.map;['streets','sat','topo'].forEach(k=>m.getLayer(k)&&m.setLayoutProperty(k,'visibility',b===k?'visible':'none'));this.basemap=b;}
   _src(id,data){const m=this.map;if(m.getSource(id))m.getSource(id).setData(data);else m.addSource(id,{type:'geojson',data});}
   _lay(def){if(!this.map.getLayer(def.id))this.map.addLayer(def);}
   setSite(D){

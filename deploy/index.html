@@ -86,6 +86,49 @@ input[type=range]{accent-color:#006990}
         </sc-if>
       </div>
     </sc-if>
+    <sc-if value="{{ showLyrMenu }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:none">
+        <button onClick="{{ toggleLyrMenu }}" aria-expanded="{{ lyrMenu }}" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:4px;padding:0 12px;height:36px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap"><svg aria-hidden="true" width="18" height="18" fill="currentColor" style="flex:none;display:inline-block;vertical-align:middle"><use href="#i-layers"></use></svg>Layers &amp; tools<span style="background:#fff;color:var(--blue-900);border-radius:10px;padding:0 7px;font-size:12px;line-height:18px;font-weight:700">{{ lyrCount }}</span><svg aria-hidden="true" width="18" height="18" fill="currentColor" style="flex:none;display:inline-block;vertical-align:middle"><use href="#i-expand_more"></use></svg></button>
+        <sc-if value="{{ lyrMenu }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:44px;left:0;z-index:50;width:360px;max-height:calc(100vh - 120px);overflow:auto;background:#fff;border:1px solid var(--gray-200);border-radius:8px;box-shadow:var(--shadow-lg);padding:14px;display:flex;flex-direction:column;gap:14px;color:var(--black)">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--black-3)">Find a feature</span>
+              <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--gray-300);border-radius:4px;padding:0 10px;height:40px"><svg aria-hidden="true" width="18" height="18" fill="currentColor" style="flex:none;display:inline-block;vertical-align:middle;color:var(--black-3)"><use href="#i-search"></use></svg><input value="{{ lyrQ }}" onInput="{{ onLyrQ }}" placeholder="e.g. proposed roads, R1A, existing parcels" aria-label="Find a feature" style="flex:1;min-width:0;border:0;outline:none;font:inherit;font-size:14px;color:var(--black);background:transparent"></div>
+              <sc-if value="{{ hasLyrHits }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:2px;border:1px solid var(--gray-200);border-radius:4px;padding:4px">
+                  <sc-for list="{{ lyrHits }}" as="h" hint-placeholder-count="3"><button onClick="{{ h.on }}" style="display:flex;justify-content:space-between;gap:12px;align-items:center;width:100%;text-align:left;background:#fff;border:0;border-radius:4px;padding:8px;cursor:pointer" style-hover="background:var(--blue-50)"><span style="font-size:14px;line-height:18px;font-weight:600;color:var(--black)">{{ h.l }}</span><span style="font-size:12px;color:var(--black-3);white-space:nowrap">{{ h.sub }}</span></button></sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ lyrNoHits }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--black-3)">No matching feature. Try “roads”, a zone code, or “parcels”.</span></sc-if>
+              <sc-if value="{{ lyrHlOn }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--blue-50);border-radius:4px;padding:6px 10px;font-size:13px;color:var(--blue-900)"><span>{{ lyrHlText }}</span><button onClick="{{ clearLyrHl }}" style="background:none;border:0;color:var(--blue-900);font-weight:600;cursor:pointer;text-decoration:underline">Clear</button></div></sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--black-3)">Layers</span>
+              <sc-for list="{{ lyrRows }}" as="r" hint-placeholder-count="7">
+                <button onClick="{{ r.on }}" disabled="{{ r.dis }}" role="checkbox" aria-checked="{{ r.ck }}" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:0;border-radius:4px;padding:6px;cursor:{{ r.cur }};opacity:{{ r.op }}" style-hover="background:var(--gray-50)">
+                  <span style="width:18px;height:18px;flex:none;border:1.5px solid var(--blue-900);border-radius:3px;background:{{ r.box }};color:#fff;display:flex;align-items:center;justify-content:center"><svg aria-hidden="true" width="14" height="14" fill="currentColor" style="visibility:{{ r.tick }}"><use href="#i-check"></use></svg></span>
+                  <span style="width:14px;height:14px;flex:none;border-radius:3px;background:{{ r.sw }};border:1px solid rgba(16,24,40,.15)"></span>
+                  <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:18px;font-weight:600;color:var(--black)">{{ r.l }}</span><span style="font-size:12px;line-height:16px;color:var(--black-3)">{{ r.sub }}</span></span>
+                </button>
+              </sc-for>
+              <span style="font-size:12px;line-height:16px;color:var(--black-3);padding:2px 6px;text-wrap:pretty">Planned and existing layers show one at a time so they never overlap. Use the swipe or side-by-side tool to compare.</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--black-3)">Basemap</span>
+              <div role="radiogroup" aria-label="Basemap" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--gray-50);border-radius:6px;padding:3px">
+                <sc-for list="{{ bmRows }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.on }}" role="radio" aria-checked="{{ b.sel }}" style="height:32px;border:0;border-radius:4px;background:{{ b.bg }};color:{{ b.fg }};font-size:13px;font-weight:600;cursor:pointer">{{ b.l }}</button></sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--black-3)">Map tools</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px">
+                <sc-for list="{{ lyrTools }}" as="tl" hint-placeholder-count="10"><button onClick="{{ tl.on }}" aria-pressed="{{ tl.pressed }}" style="display:flex;align-items:center;gap:8px;text-align:left;background:{{ tl.bg }};color:{{ tl.fg }};border:0;border-radius:4px;padding:7px 8px;font-size:13px;line-height:16px;cursor:pointer" style-hover="background:var(--gray-50)"><svg aria-hidden="true" width="18" height="18" fill="currentColor" style="flex:none"><use href="#i-{{ tl.icon }}"></use></svg><span>{{ tl.title }}</span></button></sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
     <sc-if value="{{ isStoryRoute }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex;align-items:center;gap:12px;flex:none;white-space:nowrap"><span style="width:1px;height:32px;background:rgba(255,255,255,.3)"></span><span style="font-size:15px;font-weight:600">Story map · {{ site.name }}</span></div>
     </sc-if>
@@ -1169,11 +1212,12 @@ const STAGE_ICONS=['campaign','map','architecture','volunteer_activism','swap_ho
 const LANGS=[['EN','English','en'],['RW','Kinyarwanda','rw'],['FR','Français','fr']];
 const STAGE_DESC=['Landholders and local leaders are informed about the project and asked to take part.','Existing parcels, owners and rights are collected from LAIS and checked.','Planners draw a new layout that follows the district land-use plan (DLUP).','Each landholder contributes the same share of land for roads and public space.','New plots are allocated to landholders according to the allocation rules agreed with landholders.','New plots are registered with new UPIs and titles are issued.','Roads, drainage, water and power are planned and built on the contributed land.'];
 
+const BM_NEXT={streets:'sat',sat:'topo',topo:'streets'};
 class Component extends DCLogic {
   maps={}; els={}; Ds=null; memo={};
-  state={ready:false,vw:typeof window!=='undefined'?window.innerWidth:1440,route:'map',siteId:'kabeza',role:'public',lang:'EN',siteMenu:false,langMenu:false,signIn:false,
+  state={ready:false,vw:typeof window!=='undefined'?window.innerWidth:1440,route:'map',siteId:'kabeza',role:'public',lang:'EN',siteMenu:false,lyrMenu:false,lyrQ:'',langMenu:false,signIn:false,
     ovF:{province:'',district:'',stage:''},ovQ:'',ovRes:null,ovSugg:[],
-    f:null,railOpen:false,railTab:'filters',layers:{basemap:'streets',boundary:true,parcels:true,layout:true,roads:true,villages:false,resurvey:false},
+    f:null,railOpen:false,railTab:'filters',layers:{basemap:'streets',boundary:true,parcels:false,layout:true,roads:true,villages:false,resurvey:false},
     op:{layout:85,parcels:100,roads:90,overlay:85},overlay:'',colorBy:'zone',lines:true,compare:'',swipeX:50,measure:false,measureD:0,measureN:0,
     sel:null,hl:null,popup:null,popTab:'plot',q:'',sugg:[],res:null,detail:false,pdf:false,tip:null,report:false,
     tOpen:false,tMode:'parcels',tSort:'',tDir:1,tPage:0,tQ:'',tExp:null,tHidden:[],colPick:false,fromUpiInput:'',
@@ -1386,7 +1430,7 @@ class Component extends DCLogic {
       cBg:done?'var(--green-500)':cur?'var(--gold-500)':'var(--gray-100)',cFg:done?'#fff':cur?'var(--black)':'var(--black-3)'};});
     return {refOv:this.refOv,refEx:this.refEx,refStory:this.refStory,refExCmp:this.refExCmp,refStCmp:this.refStCmp,refExWrap:this.refExWrap,refStWrap:this.refStWrap,refStoryScroll:this.refStoryScroll,refSearch:this.refSearch,t,ready:s.ready,loading:!s.ready,route:s.route,roles,roleNote:s.role==='public'?'Owner names hidden; search by UPI or plot ID.':s.role==='staff'?'Owner names visible; owner-name search enabled.':'Owner names visible; Data manager enabled.',
       goOverview:this.pd(()=>this.go('map')),isStoryRoute:s.route==='story',navDisp:s.route==='story'?'none':'flex',storyToMap:()=>this.setState({route:'map',sel:null,res:null}),goOverviewLink:this.pd(()=>this.go('overview')),goData:()=>this.go('data'),goAnalytics:()=>this.go('analytics'),
-      onSitePage:onSite&&s.route!=='story',site:Object.assign({},site),siteMenu:s.siteMenu,toggleSiteMenu:()=>this.setState(x=>({siteMenu:!x.siteMenu,langMenu:false})),
+      onSitePage:onSite&&s.route!=='story',site:Object.assign({},site),siteMenu:s.siteMenu,toggleSiteMenu:()=>this.setState(x=>({siteMenu:!x.siteMenu,lyrMenu:false,langMenu:false})),
       siteOptions:(window.LR?LR.sites:[]).map(x=>({name:x.name+(x.mock?' (mock data)':''),sub:x.sector+' · '+x.district+' · '+x.province,bg:x.id===s.siteId?'var(--blue-50)':'#fff',on:()=>this.openSite(x.id,s.route)})).concat([{name:'National overview',sub:'All land readjustment sites',bg:s.route==='overview'?'var(--blue-50)':'#fff',on:()=>this.go('overview')}]),
       tabs,isAdmin:s.role==='admin',dmOp:s.route==='data'?1:0.85,langs:LANGS.map(([c,n,h])=>({code:c,name:n,html:h,sel:String(s.lang===c),isSel:s.lang===c,bg:s.lang===c?'var(--blue-50)':'#fff',on:()=>this.setState({lang:c,langMenu:false})})),
       langMenu:s.langMenu,langMenuStr:String(!!s.langMenu),toggleLangMenu:()=>this.setState(x=>({langMenu:!x.langMenu,siteMenu:false})),langCode:s.lang,langHtml:(LANGS.find(l=>l[0]===s.lang)||LANGS[0])[2],langAria:'Language: '+(LANGS.find(l=>l[0]===s.lang)||LANGS[0])[1],
@@ -1404,6 +1448,32 @@ class Component extends DCLogic {
       nameHint:s.role!=='public'?t.staffHint:'',tipKOff:()=>this.setState({kTip:null}),
     };
   }
+  vLyrMenu(D,tools){
+    const s=this.state,L=s.layers,f=LR.fmt,PLAN=['layout','roads'],EXIST=['parcels','resurvey'];
+    const hasRs=!!(D.fc&&D.fc.rs&&D.fc.rs.features&&D.fc.rs.features.length),nRoad=D.plots.filter(q=>q.cat==='Road').length,nPlot=D.plots.length-nRoad;
+    const setL=(patch,extra)=>this.setState(x=>Object.assign({layers:Object.assign({},x.layers,patch)},extra||{}));
+    const tog=k=>()=>{const on=!L[k],p={[k]:on};if(on){if(PLAN.includes(k))EXIST.forEach(e=>p[e]=false);if(EXIST.includes(k))PLAN.forEach(e=>p[e]=false);}setL(p);};
+    const row=(k,l,sub,sw,ok=true)=>({l,sub,sw,on:ok?tog(k):null,checked:ok&&!!L[k],ck:String(ok&&!!L[k]),dis:!ok,op:ok?1:0.5,cur:ok?'pointer':'not-allowed',box:ok&&L[k]?'var(--blue-900)':'#fff',tick:ok&&L[k]?'visible':'hidden'});
+    const lyrRows=[row('layout','Planned layout',f(nPlot)+' new plots, coloured by zone','#FFE066'),row('roads','Proposed roads',f(nRoad)+' road-reserve polygons (T1)','#B0B7BE'),
+      row('parcels','Existing parcels (LAIS)',f(D.parcels.length)+' recorded parcels','#004059'),row('resurvey','Resurveyed parcels',hasRs?'2026 field resurvey':'No resurvey data for this site','#20603D',hasRs),
+      row('boundary','Site boundary','Readjustment area outline','#101828'),row('villages','Villages','Administrative village limits','#73CBED'),
+      {l:'Existing roads',sub:'Not in the current data pack',sw:'#98A2B3',on:null,ck:'false',dis:true,op:0.5,cur:'not-allowed',box:'#fff',tick:'hidden'}];
+    const bmRows=Object.keys(LR.BASEMAPS).map(k=>({l:LR.BASEMAPS[k].label,sel:String(L.basemap===k),bg:L.basemap===k?'var(--blue-900)':'#fff',fg:L.basemap===k?'#fff':'var(--black-2)',on:()=>setL({basemap:k})}));
+    const only=(patch)=>Object.assign({layout:false,roads:false,parcels:false,resurvey:false},patch);
+    const go=(patch,fz,msg)=>()=>{this.setState(x=>({layers:Object.assign({},x.layers,only(patch)),f:Object.assign(LR.emptyFilters(),fz?{zones:fz}:{}),sel:null,res:null,popup:null,lyrQ:'',lyrMenu:false}));this.maps.ex&&this.maps.ex.fitSite();if(msg)this.toastMsg(msg);};
+    const zs=[...new Set(D.plots.map(q=>q.zone))].filter(z=>z!=='T1'&&LR.ZONES[z]);
+    const cat=[{l:'Proposed roads',sub:f(nRoad)+' polygons · zone T1',kw:'proposed planned new roads road reserve t1 street',on:go({roads:true},null,'Showing all '+f(nRoad)+' proposed roads')},
+      {l:'Planned layout',sub:f(nPlot)+' new plots',kw:'planned layout new plots proposed physical plan',on:go({layout:true,roads:true})},
+      {l:'Existing parcels (LAIS)',sub:f(D.parcels.length)+' parcels',kw:'existing parcels lais old cadastre',on:go({parcels:true})}]
+      .concat(hasRs?[{l:'Resurveyed parcels',sub:'2026 field resurvey',kw:'resurveyed resurvey field parcels 2026',on:go({resurvey:true})}]:[])
+      .concat(zs.map(z=>{const n=D.plots.filter(q=>q.zone===z).length;return{l:'Zone '+z+' · '+LR.ZONES[z].n,sub:f(n)+' plots',kw:(z+' zone '+LR.ZONES[z].n).toLowerCase(),on:go({layout:true,roads:true},[z],'Highlighting '+f(n)+' plots in zone '+z)};}));
+    const q=s.lyrQ.trim().toLowerCase(),words=q.split(/\s+/).filter(Boolean),hits=q?cat.filter(c=>words.every(w=>c.kw.includes(w)||c.l.toLowerCase().includes(w))).slice(0,6):[];
+    const tl=tools.map(x=>Object.assign({},x,{on:()=>{this.setState({lyrMenu:false});x.on();}}));
+    const fz=s.f&&s.f.zones&&s.f.zones.length;
+    return {showLyrMenu:true,lyrMenu:s.lyrMenu,toggleLyrMenu:()=>this.setState(x=>({lyrMenu:!x.lyrMenu,siteMenu:false,langMenu:false})),closeLyrMenu:()=>this.setState({lyrMenu:false}),
+      lyrRows,bmRows,lyrQ:s.lyrQ,onLyrQ:e=>this.setState({lyrQ:e.target.value}),lyrHits:hits,hasLyrHits:hits.length>0,lyrNoHits:!!q&&!hits.length,lyrTools:tl,
+      lyrHlOn:!!fz,lyrHlText:fz?'Highlighting zone '+s.f.zones.join(', '):'',clearLyrHl:()=>this.setState({f:LR.emptyFilters()}),lyrCount:String(lyrRows.filter(r=>r.checked).length)};
+  }
   renderVals(){
     if(!window.LR||!LR.STAGES)return{loading:true,roles:[],tabs:[],langs:[],signedOut:true,t:this.tr(),site:{},langCode:this.state.lang,lockShort:true};
     const s=this.state,V=this.pageBase();if(!s.ready)return V;
@@ -1412,7 +1482,7 @@ class Component extends DCLogic {
     Object.assign(V,this.vSearchShared(D,staff));
     if(s.route==='overview')Object.assign(V,this.vOverview());
     if(s.route==='story')Object.assign(V,this.vStory(D,site,narrow));
-    if(s.route==='map')Object.assign(V,this.vMap(D,site,narrow,staff,ownerOf));
+    if(s.route==='map'){Object.assign(V,this.vMap(D,site,narrow,staff,ownerOf));Object.assign(V,this.vLyrMenu(D,V.tools));}
     if(s.route==='analytics')Object.assign(V,this.vAnalytics(D,site,narrow));
     if(s.route==='data')Object.assign(V,this.vData(D,site,narrow));
     Object.assign(V,this.vDetail(D,site,staff,ownerOf,narrow));
@@ -1511,7 +1581,7 @@ class Component extends DCLogic {
     V.tools=[tool('fit_screen','Zoom to site',()=>this.maps.ex&&this.maps.ex.fitSite()),tool('my_location','Geolocate',()=>{this.toastMsg('Your location is outside '+site.name+'. Showing the whole site.');this.maps.ex&&this.maps.ex.fitSite();}),
       tool('straighten','Measure distance',()=>this.setState(x=>({measure:!x.measure,measureD:0,measureN:0})),s.measure),tool('compare','Before/after swipe',()=>this.setState(x=>({compare:x.compare==='swipe'?'':'swipe',popup:null})),s.compare==='swipe'),
       tool('vertical_split','Side by side',()=>this.setState(x=>({compare:x.compare==='side'?'':'side',popup:null})),s.compare==='side'),
-      tool('construction','Infrastructure panel',()=>this.setState(x=>{const on=!(x.infraPanel&&!x.sel&&!x.res&&this.infraShown());return{infraPanel:on,sel:null,res:null,q:'',railOpen:on&&x.vw<1280?false:x.railOpen};}),this.infraShown()),tool('fullscreen','Fullscreen',()=>{const el=this.els.exWrap;if(document.fullscreenElement)document.exitFullscreen();else if(el&&el.requestFullscreen)el.requestFullscreen();}),tool('public',s.layers.basemap==='sat'?'Switch to street view':'Switch to satellite view',()=>this.setState(x=>({layers:Object.assign({},x.layers,{basemap:x.layers.basemap==='sat'?'streets':'sat'})})),s.layers.basemap==='sat'),tool('auto_stories','Story map',()=>this.go('story')),tool('print','Print map',()=>window.print()),tool('palette',s.colorPanel?'Hide “Colour new plots by”':'Colour new plots by',()=>this.setState(x=>({colorPanel:!x.colorPanel})),s.colorPanel)];
+      tool('construction','Infrastructure panel',()=>this.setState(x=>{const on=!(x.infraPanel&&!x.sel&&!x.res&&this.infraShown());return{infraPanel:on,sel:null,res:null,q:'',railOpen:on&&x.vw<1280?false:x.railOpen};}),this.infraShown()),tool('fullscreen','Fullscreen',()=>{const el=this.els.exWrap;if(document.fullscreenElement)document.exitFullscreen();else if(el&&el.requestFullscreen)el.requestFullscreen();}),tool('public','Basemap: '+LR.BASEMAPS[s.layers.basemap].label+' — click for '+LR.BASEMAPS[BM_NEXT[s.layers.basemap]].label,()=>this.setState(x=>({layers:Object.assign({},x.layers,{basemap:BM_NEXT[x.layers.basemap]})})),s.layers.basemap!=='streets'),tool('auto_stories','Story map',()=>this.go('story')),tool('print','Print map',()=>window.print()),tool('palette',s.colorPanel?'Hide “Colour new plots by”':'Colour new plots by',()=>this.setState(x=>({colorPanel:!x.colorPanel})),s.colorPanel)];
     V.colorPanel=!!s.colorPanel;{const wh=this.els.exWrap?this.els.exWrap.clientHeight:800,want=(V.tools.length-1)*40,minTop=s.measure?48:0;V.colorPanelTop=Math.max(minTop,Math.min(want,wh-24-200))+'px';}V.closeColorPanel=()=>this.setState({colorPanel:false});
     V.measure=s.measure;V.measureTxt=s.measureN<2?'Click on the map to add points':'Distance: '+f(s.measureD)+' m ('+(s.measureN-1)+' segment'+(s.measureN>2?'s':'')+')';V.resetMeasure=()=>{this.maps.ex&&this.maps.ex.setMeasure(true);this.setState({measureD:0,measureN:0});};
     V.colorBys=[['zone','Zone'],['nsrc','Source UPIs'],['link','Link type']].map(([k,l])=>({l,bg:s.colorBy===k?'var(--blue-700)':'#fff',fg:s.colorBy===k?'#fff':'var(--black-2)',on:()=>this.setState({colorBy:k})}));

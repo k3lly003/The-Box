@@ -1,7 +1,6 @@
 # --- Ignore specific folders ---
 node_modules/
 sb-annotations*errors/
-postgres-sharding/node_modules/
 
 # --- Ignore config and lock files ---
 .env
@@ -11,3 +10,24 @@ application.properties
 # --- Ignore IDE files ---
 .idea/
 .vscode/
+
+# --- Archives ---
+*.zip
+
+# --- Secrets ---
+*backup-codes*.txt
+
+# --- Node / JS builds ---
+.next/
+dist/
+build/
+.expo/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+db.sqlite3
+
+# --- Java / Maven ---
+target/
